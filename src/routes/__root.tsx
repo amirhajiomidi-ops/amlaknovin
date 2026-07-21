@@ -79,23 +79,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "املاک — پلتفرم امن رهن و اجاره" },
+      { title: "املاک — از فایل معتبر تا قرارداد امن" },
       {
         name: "description",
         content:
-          "از فایل معتبر تا قرارداد امن؛ رهن و اجاره مسکونی با احراز فایل، پرداخت امن و قرارداد یکپارچه.",
+          "پلتفرم امن رهن و اجاره املاک؛ فایل تأییدشده، پرداخت امن و قرارداد یکپارچه.",
       },
       { name: "author", content: "املاک" },
       { name: "theme-color", content: "#1E4D8F" },
-      { property: "og:title", content: "املاک — پلتفرم امن رهن و اجاره" },
+      { property: "og:title", content: "املاک — از فایل معتبر تا قرارداد امن" },
       {
         property: "og:description",
         content:
-          "مسیر امن رهن و اجاره مسکونی از کشف فایل معتبر تا تسویه.",
+          "پلتفرم امن رهن و اجاره املاک؛ فایل تأییدشده، پرداخت امن و قرارداد یکپارچه.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "fa_IR" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "املاک — از فایل معتبر تا قرارداد امن" },
+      { name: "twitter:description", content: "پلتفرم امن رهن و اجاره املاک؛ فایل تأییدشده، پرداخت امن و قرارداد یکپارچه." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fae07d46-760d-47a2-8017-1ec5142b8255/id-preview-18193836--93c8e91f-d568-42c7-9635-9a80a86845f6.lovable.app-1784623678290.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fae07d46-760d-47a2-8017-1ec5142b8255/id-preview-18193836--93c8e91f-d568-42c7-9635-9a80a86845f6.lovable.app-1784623678290.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
