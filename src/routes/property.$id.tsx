@@ -246,9 +246,7 @@ function PropertyDetail() {
             </div>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {similar.map((p) => (
-                <div key={p.id} className="[&_a]:h-full">
-                  <SimilarLink property={p} />
-                </div>
+                <PropertyCard key={p.id} property={p} fit={currentTenantFit[p.id]} />
               ))}
             </div>
           </section>
