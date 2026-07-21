@@ -40,6 +40,7 @@ import {
   type Property,
 } from "@/data/properties";
 import { formatCompactTomans, formatTomans, toFaDigits } from "@/lib/format";
+import { PropertyCard } from "@/components/property/property-card";
 
 export const Route = createFileRoute("/property/$id")({
   loader: ({ params }) => {
