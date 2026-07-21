@@ -553,14 +553,6 @@ function UserTimeline({ property, fit }: { property: Property; fit?: FinancialFi
   );
 }
 
-function SimilarLink({ property }: { property: Property }) {
-  const {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ...rest
-  } = property;
-  const PropertyCardLazy = require("@/components/property/property-card").PropertyCard as (props: { property: Property }) => JSX.Element;
-  return <PropertyCardLazy property={rest as Property} />;
-}
 
 function PropertyNotFound() {
   return (
