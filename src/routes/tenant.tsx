@@ -29,13 +29,18 @@ export const Route = createFileRoute("/tenant")({
   component: TenantLayout,
 });
 
-const navItems = [
+const navItems: ReadonlyArray<{
+  to: "/tenant" | "/tenant/profile" | "/tenant/bookings" | "/tenant/offers" | "/tenant/contracts";
+  label: string;
+  icon: typeof LayoutDashboard;
+  exact?: boolean;
+}> = [
   { to: "/tenant", label: "داشبورد", icon: LayoutDashboard, exact: true },
   { to: "/tenant/profile", label: "پروفایل مالی", icon: UserRound },
   { to: "/tenant/bookings", label: "بازدیدها", icon: CalendarClock },
   { to: "/tenant/offers", label: "پیشنهادها", icon: Handshake },
   { to: "/tenant/contracts", label: "قراردادها", icon: FileSignature },
-] as const;
+];
 
 function TenantLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
