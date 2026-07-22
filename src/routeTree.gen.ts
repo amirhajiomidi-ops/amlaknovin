@@ -9,12 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TenantRouteImport } from './routes/tenant'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ListPropertyRouteImport } from './routes/list-property'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TenantIndexRouteImport } from './routes/tenant.index'
+import { Route as TenantProfileRouteImport } from './routes/tenant.profile'
+import { Route as TenantOffersRouteImport } from './routes/tenant.offers'
+import { Route as TenantContractsRouteImport } from './routes/tenant.contracts'
+import { Route as TenantBookingsRouteImport } from './routes/tenant.bookings'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 
+const TenantRoute = TenantRouteImport.update({
+  id: '/tenant',
+  path: '/tenant',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -35,6 +46,31 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TenantIndexRoute = TenantIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TenantRoute,
+} as any)
+const TenantProfileRoute = TenantProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => TenantRoute,
+} as any)
+const TenantOffersRoute = TenantOffersRouteImport.update({
+  id: '/offers',
+  path: '/offers',
+  getParentRoute: () => TenantRoute,
+} as any)
+const TenantContractsRoute = TenantContractsRouteImport.update({
+  id: '/contracts',
+  path: '/contracts',
+  getParentRoute: () => TenantRoute,
+} as any)
+const TenantBookingsRoute = TenantBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => TenantRoute,
+} as any)
 const PropertyIdRoute = PropertyIdRouteImport.update({
   id: '/property/$id',
   path: '/property/$id',
@@ -46,7 +82,13 @@ export interface FileRoutesByFullPath {
   '/guide': typeof GuideRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
+  '/tenant': typeof TenantRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
+  '/tenant/bookings': typeof TenantBookingsRoute
+  '/tenant/contracts': typeof TenantContractsRoute
+  '/tenant/offers': typeof TenantOffersRoute
+  '/tenant/profile': typeof TenantProfileRoute
+  '/tenant/': typeof TenantIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +96,11 @@ export interface FileRoutesByTo {
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
   '/property/$id': typeof PropertyIdRoute
+  '/tenant/bookings': typeof TenantBookingsRoute
+  '/tenant/contracts': typeof TenantContractsRoute
+  '/tenant/offers': typeof TenantOffersRoute
+  '/tenant/profile': typeof TenantProfileRoute
+  '/tenant': typeof TenantIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,20 +108,53 @@ export interface FileRoutesById {
   '/guide': typeof GuideRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
+  '/tenant': typeof TenantRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
+  '/tenant/bookings': typeof TenantBookingsRoute
+  '/tenant/contracts': typeof TenantContractsRoute
+  '/tenant/offers': typeof TenantOffersRoute
+  '/tenant/profile': typeof TenantProfileRoute
+  '/tenant/': typeof TenantIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/guide' | '/list-property' | '/search' | '/property/$id'
+  fullPaths:
+    | '/'
+    | '/guide'
+    | '/list-property'
+    | '/search'
+    | '/tenant'
+    | '/property/$id'
+    | '/tenant/bookings'
+    | '/tenant/contracts'
+    | '/tenant/offers'
+    | '/tenant/profile'
+    | '/tenant/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/guide' | '/list-property' | '/search' | '/property/$id'
+  to:
+    | '/'
+    | '/guide'
+    | '/list-property'
+    | '/search'
+    | '/property/$id'
+    | '/tenant/bookings'
+    | '/tenant/contracts'
+    | '/tenant/offers'
+    | '/tenant/profile'
+    | '/tenant'
   id:
     | '__root__'
     | '/'
     | '/guide'
     | '/list-property'
     | '/search'
+    | '/tenant'
     | '/property/$id'
+    | '/tenant/bookings'
+    | '/tenant/contracts'
+    | '/tenant/offers'
+    | '/tenant/profile'
+    | '/tenant/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -82,11 +162,19 @@ export interface RootRouteChildren {
   GuideRoute: typeof GuideRoute
   ListPropertyRoute: typeof ListPropertyRoute
   SearchRoute: typeof SearchRoute
+  TenantRoute: typeof TenantRouteWithChildren
   PropertyIdRoute: typeof PropertyIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tenant': {
+      id: '/tenant'
+      path: '/tenant'
+      fullPath: '/tenant'
+      preLoaderRoute: typeof TenantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -115,6 +203,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tenant/': {
+      id: '/tenant/'
+      path: '/'
+      fullPath: '/tenant/'
+      preLoaderRoute: typeof TenantIndexRouteImport
+      parentRoute: typeof TenantRoute
+    }
+    '/tenant/profile': {
+      id: '/tenant/profile'
+      path: '/profile'
+      fullPath: '/tenant/profile'
+      preLoaderRoute: typeof TenantProfileRouteImport
+      parentRoute: typeof TenantRoute
+    }
+    '/tenant/offers': {
+      id: '/tenant/offers'
+      path: '/offers'
+      fullPath: '/tenant/offers'
+      preLoaderRoute: typeof TenantOffersRouteImport
+      parentRoute: typeof TenantRoute
+    }
+    '/tenant/contracts': {
+      id: '/tenant/contracts'
+      path: '/contracts'
+      fullPath: '/tenant/contracts'
+      preLoaderRoute: typeof TenantContractsRouteImport
+      parentRoute: typeof TenantRoute
+    }
+    '/tenant/bookings': {
+      id: '/tenant/bookings'
+      path: '/bookings'
+      fullPath: '/tenant/bookings'
+      preLoaderRoute: typeof TenantBookingsRouteImport
+      parentRoute: typeof TenantRoute
+    }
     '/property/$id': {
       id: '/property/$id'
       path: '/property/$id'
@@ -125,11 +248,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface TenantRouteChildren {
+  TenantBookingsRoute: typeof TenantBookingsRoute
+  TenantContractsRoute: typeof TenantContractsRoute
+  TenantOffersRoute: typeof TenantOffersRoute
+  TenantProfileRoute: typeof TenantProfileRoute
+  TenantIndexRoute: typeof TenantIndexRoute
+}
+
+const TenantRouteChildren: TenantRouteChildren = {
+  TenantBookingsRoute: TenantBookingsRoute,
+  TenantContractsRoute: TenantContractsRoute,
+  TenantOffersRoute: TenantOffersRoute,
+  TenantProfileRoute: TenantProfileRoute,
+  TenantIndexRoute: TenantIndexRoute,
+}
+
+const TenantRouteWithChildren =
+  TenantRoute._addFileChildren(TenantRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GuideRoute: GuideRoute,
   ListPropertyRoute: ListPropertyRoute,
   SearchRoute: SearchRoute,
+  TenantRoute: TenantRouteWithChildren,
   PropertyIdRoute: PropertyIdRoute,
 }
 export const routeTree = rootRouteImport

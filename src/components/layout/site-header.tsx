@@ -4,9 +4,10 @@ import { Menu, Search, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { label: "آگهی‌ها", to: "/" },
-  { label: "راهنمای معامله امن", to: "/" },
-  { label: "ثبت ملک", to: "/" },
+  { label: "آگهی‌ها", to: "/search" },
+  { label: "پنل من", to: "/tenant" },
+  { label: "راهنمای معامله امن", to: "/guide" },
+  { label: "ثبت ملک", to: "/list-property" },
 ] as const;
 
 export function SiteHeader() {
