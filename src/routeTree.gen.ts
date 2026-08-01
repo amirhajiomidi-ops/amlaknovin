@@ -23,6 +23,7 @@ import { Route as TenantOffersRouteImport } from './routes/tenant.offers'
 import { Route as TenantContractsRouteImport } from './routes/tenant.contracts'
 import { Route as TenantBookingsRouteImport } from './routes/tenant.bookings'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
+import { Route as LandlordWalletRouteImport } from './routes/landlord.wallet'
 import { Route as LandlordPropertiesRouteImport } from './routes/landlord.properties'
 import { Route as LandlordOffersRouteImport } from './routes/landlord.offers'
 import { Route as LandlordContractsRouteImport } from './routes/landlord.contracts'
@@ -98,6 +99,11 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
   path: '/property/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LandlordWalletRoute = LandlordWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => LandlordRoute,
+} as any)
 const LandlordPropertiesRoute = LandlordPropertiesRouteImport.update({
   id: '/properties',
   path: '/properties',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
   '/landlord/properties': typeof LandlordPropertiesRoute
+  '/landlord/wallet': typeof LandlordWalletRoute
   '/property/$id': typeof PropertyIdRoute
   '/tenant/bookings': typeof TenantBookingsRoute
   '/tenant/contracts': typeof TenantContractsRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
   '/landlord/properties': typeof LandlordPropertiesRoute
+  '/landlord/wallet': typeof LandlordWalletRoute
   '/property/$id': typeof PropertyIdRoute
   '/tenant/bookings': typeof TenantBookingsRoute
   '/tenant/contracts': typeof TenantContractsRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
   '/landlord/properties': typeof LandlordPropertiesRoute
+  '/landlord/wallet': typeof LandlordWalletRoute
   '/property/$id': typeof PropertyIdRoute
   '/tenant/bookings': typeof TenantBookingsRoute
   '/tenant/contracts': typeof TenantContractsRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/landlord/contracts'
     | '/landlord/offers'
     | '/landlord/properties'
+    | '/landlord/wallet'
     | '/property/$id'
     | '/tenant/bookings'
     | '/tenant/contracts'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/landlord/contracts'
     | '/landlord/offers'
     | '/landlord/properties'
+    | '/landlord/wallet'
     | '/property/$id'
     | '/tenant/bookings'
     | '/tenant/contracts'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/landlord/contracts'
     | '/landlord/offers'
     | '/landlord/properties'
+    | '/landlord/wallet'
     | '/property/$id'
     | '/tenant/bookings'
     | '/tenant/contracts'
@@ -350,6 +362,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/landlord/wallet': {
+      id: '/landlord/wallet'
+      path: '/wallet'
+      fullPath: '/landlord/wallet'
+      preLoaderRoute: typeof LandlordWalletRouteImport
+      parentRoute: typeof LandlordRoute
+    }
     '/landlord/properties': {
       id: '/landlord/properties'
       path: '/properties'
@@ -386,6 +405,7 @@ interface LandlordRouteChildren {
   LandlordContractsRoute: typeof LandlordContractsRoute
   LandlordOffersRoute: typeof LandlordOffersRoute
   LandlordPropertiesRoute: typeof LandlordPropertiesRoute
+  LandlordWalletRoute: typeof LandlordWalletRoute
   LandlordIndexRoute: typeof LandlordIndexRoute
 }
 
@@ -394,6 +414,7 @@ const LandlordRouteChildren: LandlordRouteChildren = {
   LandlordContractsRoute: LandlordContractsRoute,
   LandlordOffersRoute: LandlordOffersRoute,
   LandlordPropertiesRoute: LandlordPropertiesRoute,
+  LandlordWalletRoute: LandlordWalletRoute,
   LandlordIndexRoute: LandlordIndexRoute,
 }
 
