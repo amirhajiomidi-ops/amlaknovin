@@ -13,6 +13,7 @@ import { Route as TenantRouteImport } from './routes/tenant'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ListPropertyRouteImport } from './routes/list-property'
 import { Route as GuideRouteImport } from './routes/guide'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TenantIndexRouteImport } from './routes/tenant.index'
 import { Route as TenantProfileRouteImport } from './routes/tenant.profile'
@@ -39,6 +40,11 @@ const ListPropertyRoute = ListPropertyRouteImport.update({
 const GuideRoute = GuideRouteImport.update({
   id: '/guide',
   path: '/guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -79,6 +85,7 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/guide': typeof GuideRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/guide': typeof GuideRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
@@ -105,6 +113,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/guide': typeof GuideRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/guide'
     | '/list-property'
     | '/search'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/guide'
     | '/list-property'
     | '/search'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/guide'
     | '/list-property'
     | '/search'
@@ -159,6 +171,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   GuideRoute: typeof GuideRoute
   ListPropertyRoute: typeof ListPropertyRoute
   SearchRoute: typeof SearchRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/guide'
       fullPath: '/guide'
       preLoaderRoute: typeof GuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -269,6 +289,7 @@ const TenantRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   GuideRoute: GuideRoute,
   ListPropertyRoute: ListPropertyRoute,
   SearchRoute: SearchRoute,
