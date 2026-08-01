@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TenantRouteImport } from './routes/tenant'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ListPropertyRouteImport } from './routes/list-property'
+import { Route as LandlordRouteImport } from './routes/landlord'
 import { Route as GuideRouteImport } from './routes/guide'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
@@ -35,6 +36,11 @@ const SearchRoute = SearchRouteImport.update({
 const ListPropertyRoute = ListPropertyRouteImport.update({
   id: '/list-property',
   path: '/list-property',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandlordRoute = LandlordRouteImport.update({
+  id: '/landlord',
+  path: '/landlord',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuideRoute = GuideRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/guide': typeof GuideRoute
+  '/landlord': typeof LandlordRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
   '/tenant': typeof TenantRouteWithChildren
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/guide': typeof GuideRoute
+  '/landlord': typeof LandlordRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
   '/property/$id': typeof PropertyIdRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/guide': typeof GuideRoute
+  '/landlord': typeof LandlordRoute
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
   '/tenant': typeof TenantRouteWithChildren
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/guide'
+    | '/landlord'
     | '/list-property'
     | '/search'
     | '/tenant'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/guide'
+    | '/landlord'
     | '/list-property'
     | '/search'
     | '/property/$id'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/guide'
+    | '/landlord'
     | '/list-property'
     | '/search'
     | '/tenant'
@@ -173,6 +185,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   GuideRoute: typeof GuideRoute
+  LandlordRoute: typeof LandlordRoute
   ListPropertyRoute: typeof ListPropertyRoute
   SearchRoute: typeof SearchRoute
   TenantRoute: typeof TenantRouteWithChildren
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/list-property'
       fullPath: '/list-property'
       preLoaderRoute: typeof ListPropertyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landlord': {
+      id: '/landlord'
+      path: '/landlord'
+      fullPath: '/landlord'
+      preLoaderRoute: typeof LandlordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/guide': {
@@ -291,6 +311,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   GuideRoute: GuideRoute,
+  LandlordRoute: LandlordRoute,
   ListPropertyRoute: ListPropertyRoute,
   SearchRoute: SearchRoute,
   TenantRoute: TenantRouteWithChildren,
