@@ -1,16 +1,33 @@
-import { Link } from "@tanstack/react-router";
-import { Menu, Search, UserRound } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { LogOut, Menu, Search, UserRound, Wallet } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAppState } from "@/context/app-state";
+import { formatCompactTomans } from "@/lib/format";
 
-const navItems = [
-  { label: "آگهی‌ها", to: "/search" },
-  { label: "پنل من", to: "/tenant" },
-  { label: "راهنمای معامله امن", to: "/guide" },
-  { label: "ثبت ملک", to: "/list-property" },
-] as const;
+const baseNav = [
+  { label: "آگهی‌ها", to: "/search" as const },
+  { label: "راهنمای معامله امن", to: "/guide" as const },
+  { label: "ثبت ملک", to: "/list-property" as const },
+];
 
 export function SiteHeader() {
+  const { user, signOut, balance } = useAppState();
+  const navigate = useNavigate();
+
+  const panelTo = user?.role === "landlord" ? "/landlord" : "/tenant";
+  const navItems = user
+    ? [{ label: "پنل من", to: panelTo as "/tenant" | "/landlord" }, ...baseNav]
+    : baseNav;
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur supports-[backdrop-filter]:bg-surface/70">
       <div className="app-container flex h-16 items-center gap-4">
@@ -53,22 +70,73 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <Button variant="ghost" size="sm">
-            ورود
-          </Button>
-          <Button variant="default" size="sm">
-            ثبت‌نام
-          </Button>
-        </div>
+        {user ? (
+          <div className="hidden items-center gap-2 md:flex">
+            <span className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground">
+              <Wallet className="size-4 text-primary" aria-hidden />
+              {formatCompactTomans(balance)}
+            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <UserRound className="size-4" aria-hidden />
+                  {user.fullName}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuLabel className="text-xs text-muted-foreground">
+                  {user.role === "landlord" ? "حساب موجر" : "حساب مستأجر"}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to={panelTo}>پنل کاربری</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to={
+                      user.role === "landlord"
+                        ? "/landlord/wallet"
+                        : "/tenant/wallet"
+                    }
+                  >
+                    کیف پول
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    signOut();
+                    navigate({ to: "/", replace: true });
+                  }}
+                >
+                  <LogOut className="size-4" aria-hidden />
+                  خروج از حساب
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ) : (
+          <div className="hidden items-center gap-2 md:flex">
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/auth" search={{ mode: "login" }}>
+                ورود
+              </Link>
+            </Button>
+            <Button asChild variant="default" size="sm">
+              <Link to="/auth" search={{ mode: "signup" }}>
+                ثبت‌نام
+              </Link>
+            </Button>
+          </div>
+        )}
 
-        <button
-          type="button"
+        <Link
+          to={user ? panelTo : "/auth"}
           aria-label="حساب کاربری"
           className="grid size-10 place-items-center rounded-xl border border-border bg-surface text-foreground md:hidden"
         >
           <UserRound className="size-5" aria-hidden />
-        </button>
+        </Link>
         <button
           type="button"
           aria-label="منو"
