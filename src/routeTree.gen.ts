@@ -18,6 +18,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TenantIndexRouteImport } from './routes/tenant.index'
 import { Route as LandlordIndexRouteImport } from './routes/landlord.index'
+import { Route as TenantWalletRouteImport } from './routes/tenant.wallet'
 import { Route as TenantProfileRouteImport } from './routes/tenant.profile'
 import { Route as TenantOffersRouteImport } from './routes/tenant.offers'
 import { Route as TenantContractsRouteImport } from './routes/tenant.contracts'
@@ -73,6 +74,11 @@ const LandlordIndexRoute = LandlordIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LandlordRoute,
+} as any)
+const TenantWalletRoute = TenantWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => TenantRoute,
 } as any)
 const TenantProfileRoute = TenantProfileRouteImport.update({
   id: '/profile',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/tenant/contracts': typeof TenantContractsRoute
   '/tenant/offers': typeof TenantOffersRoute
   '/tenant/profile': typeof TenantProfileRoute
+  '/tenant/wallet': typeof TenantWalletRoute
   '/landlord/': typeof LandlordIndexRoute
   '/tenant/': typeof TenantIndexRoute
 }
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/tenant/contracts': typeof TenantContractsRoute
   '/tenant/offers': typeof TenantOffersRoute
   '/tenant/profile': typeof TenantProfileRoute
+  '/tenant/wallet': typeof TenantWalletRoute
   '/landlord': typeof LandlordIndexRoute
   '/tenant': typeof TenantIndexRoute
 }
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/tenant/contracts': typeof TenantContractsRoute
   '/tenant/offers': typeof TenantOffersRoute
   '/tenant/profile': typeof TenantProfileRoute
+  '/tenant/wallet': typeof TenantWalletRoute
   '/landlord/': typeof LandlordIndexRoute
   '/tenant/': typeof TenantIndexRoute
 }
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/tenant/contracts'
     | '/tenant/offers'
     | '/tenant/profile'
+    | '/tenant/wallet'
     | '/landlord/'
     | '/tenant/'
   fileRoutesByTo: FileRoutesByTo
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/tenant/contracts'
     | '/tenant/offers'
     | '/tenant/profile'
+    | '/tenant/wallet'
     | '/landlord'
     | '/tenant'
   id:
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/tenant/contracts'
     | '/tenant/offers'
     | '/tenant/profile'
+    | '/tenant/wallet'
     | '/landlord/'
     | '/tenant/'
   fileRoutesById: FileRoutesById
@@ -326,6 +338,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/landlord/'
       preLoaderRoute: typeof LandlordIndexRouteImport
       parentRoute: typeof LandlordRoute
+    }
+    '/tenant/wallet': {
+      id: '/tenant/wallet'
+      path: '/wallet'
+      fullPath: '/tenant/wallet'
+      preLoaderRoute: typeof TenantWalletRouteImport
+      parentRoute: typeof TenantRoute
     }
     '/tenant/profile': {
       id: '/tenant/profile'
@@ -427,6 +446,7 @@ interface TenantRouteChildren {
   TenantContractsRoute: typeof TenantContractsRoute
   TenantOffersRoute: typeof TenantOffersRoute
   TenantProfileRoute: typeof TenantProfileRoute
+  TenantWalletRoute: typeof TenantWalletRoute
   TenantIndexRoute: typeof TenantIndexRoute
 }
 
@@ -435,6 +455,7 @@ const TenantRouteChildren: TenantRouteChildren = {
   TenantContractsRoute: TenantContractsRoute,
   TenantOffersRoute: TenantOffersRoute,
   TenantProfileRoute: TenantProfileRoute,
+  TenantWalletRoute: TenantWalletRoute,
   TenantIndexRoute: TenantIndexRoute,
 }
 
