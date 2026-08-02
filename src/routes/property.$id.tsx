@@ -126,6 +126,21 @@ function PropertyDetail() {
                 <Badge variant="secondary">
                   {property.dealType === "mortgage" ? "رهن کامل" : "رهن و اجاره"}
                 </Badge>
+                {promo ? (
+                  <Badge
+                    variant="outline"
+                    className={
+                      promo.planId === "featured"
+                        ? "border-primary/40 bg-primary text-primary-foreground"
+                        : promo.planId === "urgent"
+                          ? "border-warning/40 bg-warning-soft text-warning"
+                          : "border-accent/30 bg-accent-soft text-accent"
+                    }
+                  >
+                    {getPlan(promo.planId).badgeLabel}
+                  </Badge>
+                ) : null}
+
                 {property.status !== "published" ? (
                   <Badge
                     variant="outline"
