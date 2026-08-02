@@ -1,3 +1,6 @@
+import { useAppState } from "@/context/app-state";
+import { activePromo } from "@/lib/ranking";
+import { getPlan } from "@/data/promotions";
 import { AdSlot } from "@/components/ads/ad-slot";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
