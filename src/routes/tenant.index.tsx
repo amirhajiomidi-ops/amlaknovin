@@ -159,6 +159,10 @@ function TenantDashboard() {
         />
       </div>
 
+      <AdSlot placement="panel-soft" size="leaderboard" />
+
+
+
       {/* بازدیدهای پیش‌رو */}
       <section className="rounded-2xl border border-border bg-surface p-5">
         <div className="mb-4 flex items-center justify-between">

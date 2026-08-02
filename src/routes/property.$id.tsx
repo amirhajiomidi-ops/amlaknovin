@@ -229,9 +229,11 @@ function PropertyDetail() {
           </div>
 
           {/* Sticky action card (desktop) */}
-          <aside className="lg:sticky lg:top-20 lg:h-fit">
+          <aside className="lg:sticky lg:top-20 lg:h-fit space-y-4">
             <ActionPanel property={property} fit={fit} />
+            <AdSlot placement="property-detail" size="sidebar" />
           </aside>
+
         </div>
 
         {/* Similar */}

@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/ads/ad-slot";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
