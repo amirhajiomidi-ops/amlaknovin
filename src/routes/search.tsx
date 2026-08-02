@@ -400,13 +400,16 @@ function SearchPage() {
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="hidden lg:block">
-          <div className="sticky top-20 rounded-2xl border border-border bg-surface p-5">
-            <h2 className="mb-4 text-sm font-semibold text-foreground">فیلترها</h2>
-            {filterPanel}
+          <div className="sticky top-20 space-y-4">
+            <div className="rounded-2xl border border-border bg-surface p-5">
+              <h2 className="mb-4 text-sm font-semibold text-foreground">فیلترها</h2>
+              {filterPanel}
+            </div>
+            <AdSlot placement="search-sidebar" size="sidebar" />
           </div>
         </aside>
 
-        <section>
+        <section className="space-y-6">
           {view === "map" ? (
             <div className="grid gap-4">
               <MapPlaceholder count={sorted.length} />
@@ -421,19 +424,52 @@ function SearchPage() {
               </div>
             </div>
           ) : sorted.length > 0 ? (
-            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {sorted.map((p) => (
-                <PropertyCard
-                  key={p.id}
-                  property={p}
-                  fit={currentTenantFit[p.id]}
-                />
-              ))}
-            </div>
+            <>
+              {featuredList.length > 0 ? (
+                <section className="rounded-2xl border border-primary/25 bg-primary-soft/40 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Crown className="size-4 text-primary" aria-hidden />
+                    <h2 className="text-sm font-semibold text-foreground">
+                      آگهی‌های ویژه
+                    </h2>
+                    <span className="text-[11px] text-muted-foreground">
+                      {pinnedNote
+                        ? "این آگهی‌ها با طرح «ویژه» در بالای نتایج نمایش داده می‌شوند."
+                        : "سنجاق‌شده با طرح ارتقای «ویژه»"}
+                    </span>
+                  </div>
+                  <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                    {featuredList.map((p) => (
+                      <PropertyCard
+                        key={p.id}
+                        property={p}
+                        fit={currentTenantFit[p.id]}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {mainList.map((p, i) => (
+                  <Fragment key={p.id}>
+                    <PropertyCard property={p} fit={currentTenantFit[p.id]} />
+                    {(i + 1) % 6 === 0 && i + 1 < mainList.length ? (
+                      <AdSlot
+                        placement="search-inline"
+                        size="inline"
+                        index={Math.floor(i / 6)}
+                      />
+                    ) : null}
+                  </Fragment>
+                ))}
+              </div>
+            </>
           ) : (
             <EmptyState onReset={resetAll} />
           )}
         </section>
+
       </div>
 
       {/* Mobile filter drawer */}
