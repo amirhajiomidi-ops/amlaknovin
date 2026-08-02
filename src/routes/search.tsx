@@ -115,6 +115,18 @@ function SearchPage() {
     }
   }, [filtered, sort]);
 
+  // اثر طرح‌های ارتقا روی ترتیب نتایج
+  const { promotions } = useAppState();
+  const { featuredList, mainList, pinnedNote } = useMemo(() => {
+    if (sort === "newest") {
+      const { featured, rest } = rankWithPromotions(sorted, promotions);
+      return { featuredList: featured, mainList: rest, pinnedNote: false };
+    }
+    const { pinned, rest } = pinLimitedFeatured(sorted, promotions, 2);
+    return { featuredList: pinned, mainList: rest, pinnedNote: pinned.length > 0 };
+  }, [sorted, promotions, sort]);
+
+
   const activeFilters: Array<{ key: string; label: string; clear: () => void }> = [];
   if (city)
     activeFilters.push({
