@@ -1,10 +1,21 @@
 import { Link } from "@tanstack/react-router";
-import { BadgeCheck, Camera, MapPin, ShieldCheck, Video } from "lucide-react";
+import {
+  BadgeCheck,
+  Camera,
+  Crown,
+  MapPin,
+  Rocket,
+  ShieldCheck,
+  Video,
+  Zap,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { useAppState } from "@/context/app-state";
 import type { Property } from "@/data/properties";
 import { fitLabels, statusLabels, type FinancialFit } from "@/data/properties";
 import { formatCompactTomans, toFaDigits } from "@/lib/format";
+import { activePromo } from "@/lib/ranking";
 
 interface Props {
   property: Property;
@@ -12,6 +23,8 @@ interface Props {
 }
 
 export function PropertyCard({ property, fit }: Props) {
+  const { promotions } = useAppState();
+  const promo = activePromo(promotions, property.id);
   const isMortgage = property.dealType === "mortgage";
   const statusTone: Record<Property["status"], string> = {
     published: "bg-success-soft text-success border-success/30",
@@ -28,12 +41,20 @@ export function PropertyCard({ property, fit }: Props) {
     unknown: "text-muted-foreground",
   };
 
+  const promoFrame =
+    promo?.planId === "featured"
+      ? "border-primary/50 ring-1 ring-primary/25"
+      : promo?.planId === "urgent"
+        ? "border-warning/50 ring-1 ring-warning/25"
+        : "border-border";
+
   return (
     <Link
       to="/property/$id"
       params={{ id: property.id }}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elevated"
+      className={`group flex flex-col overflow-hidden rounded-2xl border bg-surface shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elevated ${promoFrame}`}
     >
+
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
           src={property.images[0]}
