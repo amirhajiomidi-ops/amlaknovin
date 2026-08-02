@@ -64,6 +64,25 @@ export function PropertyCard({ property, fit }: Props) {
         />
         <div className="absolute inset-x-0 top-0 flex items-start justify-between p-3">
           <div className="flex flex-col gap-1">
+            {promo?.planId === "featured" ? (
+              <span className="trust-badge border-primary/40 bg-primary text-primary-foreground">
+                <Crown className="size-3" aria-hidden />
+                ویژه
+              </span>
+            ) : null}
+            {promo?.planId === "urgent" ? (
+              <span className="trust-badge border-warning/40 bg-warning-soft text-warning">
+                <Zap className="size-3" aria-hidden />
+                فوری
+              </span>
+            ) : null}
+            {promo?.planId === "bump-once" || promo?.planId === "bump-auto-7" ? (
+              <span className="trust-badge border-accent/30 bg-accent-soft text-accent">
+                <Rocket className="size-3" aria-hidden />
+                نردبان
+              </span>
+            ) : null}
+
             {property.fileVerified ? (
               <span className="trust-badge border-success/30 bg-success-soft text-success">
                 <ShieldCheck className="size-3" aria-hidden />
