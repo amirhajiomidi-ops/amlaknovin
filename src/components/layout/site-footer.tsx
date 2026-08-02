@@ -5,37 +5,40 @@ const columns = [
   {
     title: "معامله امن",
     links: [
-      { label: "راهنمای رهن و اجاره", to: "/" },
-      { label: "احراز فایل و مالک", to: "/" },
-      { label: "پرداخت دو مرحله‌ای", to: "/" },
-      { label: "قرارداد خودنویس", to: "/" },
+      { label: "راهنمای رهن و اجاره", to: "/guide" },
+      { label: "احراز فایل و مالک", to: "/guide" },
+      { label: "پرداخت دو مرحله‌ای", to: "/guide" },
+      { label: "قرارداد خودنویس", to: "/guide" },
     ],
   },
   {
     title: "برای مستأجر",
     links: [
-      { label: "جست‌وجوی خانه", to: "/" },
-      { label: "بازدیدهای من", to: "/" },
-      { label: "پیشنهادهای من", to: "/" },
+      { label: "جست‌وجوی خانه", to: "/search" },
+      { label: "بازدیدهای من", to: "/tenant/bookings" },
+      { label: "پیشنهادهای من", to: "/tenant/offers" },
+      { label: "کیف پول", to: "/tenant/wallet" },
     ],
   },
   {
     title: "برای موجر",
     links: [
-      { label: "ثبت ملک", to: "/" },
-      { label: "داشبورد موجر", to: "/" },
-      { label: "قوانین انتشار فایل", to: "/" },
+      { label: "ثبت ملک", to: "/list-property" },
+      { label: "داشبورد موجر", to: "/landlord" },
+      { label: "ملک‌های من", to: "/landlord/properties" },
+      { label: "کیف پول", to: "/landlord/wallet" },
     ],
   },
   {
     title: "پشتیبانی",
     links: [
-      { label: "مرکز راهنما", to: "/" },
-      { label: "تماس با ما", to: "/" },
-      { label: "حریم خصوصی", to: "/" },
+      { label: "مرکز راهنما", to: "/guide" },
+      { label: "مدیریت تبلیغات (دمو)", to: "/admin/ads" },
+      { label: "ورود / ثبت‌نام", to: "/auth" },
     ],
   },
 ] as const;
+
 
 export function SiteFooter() {
   const year = toFaDigits(new Intl.DateTimeFormat("fa-IR-u-ca-persian", {

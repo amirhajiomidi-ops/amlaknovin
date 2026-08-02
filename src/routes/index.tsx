@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/ads/ad-slot";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -197,7 +198,13 @@ function HomePage() {
         </div>
       </section>
 
+      {/* بنر تبلیغاتی */}
+      <section className="app-container">
+        <AdSlot placement="home-leaderboard" size="leaderboard" />
+      </section>
+
       {/* Deal steps */}
+
       <section className="app-container">
         <div className="rounded-3xl border border-border bg-surface p-8 md:p-12">
           <div className="mb-8 text-center">

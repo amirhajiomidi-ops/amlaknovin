@@ -1,3 +1,7 @@
+import { useAppState } from "@/context/app-state";
+import { activePromo } from "@/lib/ranking";
+import { getPlan } from "@/data/promotions";
+import { AdSlot } from "@/components/ads/ad-slot";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import {
@@ -82,6 +86,9 @@ export const Route = createFileRoute("/property/$id")({
 function PropertyDetail() {
   const { property } = Route.useLoaderData() as { property: Property };
   const fit = currentTenantFit[property.id];
+  const { promotions } = useAppState();
+  const promo = activePromo(promotions, property.id);
+
 
   const similar = properties
     .filter(
@@ -119,6 +126,21 @@ function PropertyDetail() {
                 <Badge variant="secondary">
                   {property.dealType === "mortgage" ? "رهن کامل" : "رهن و اجاره"}
                 </Badge>
+                {promo ? (
+                  <Badge
+                    variant="outline"
+                    className={
+                      promo.planId === "featured"
+                        ? "border-primary/40 bg-primary text-primary-foreground"
+                        : promo.planId === "urgent"
+                          ? "border-warning/40 bg-warning-soft text-warning"
+                          : "border-accent/30 bg-accent-soft text-accent"
+                    }
+                  >
+                    {getPlan(promo.planId).badgeLabel}
+                  </Badge>
+                ) : null}
+
                 {property.status !== "published" ? (
                   <Badge
                     variant="outline"
@@ -229,9 +251,11 @@ function PropertyDetail() {
           </div>
 
           {/* Sticky action card (desktop) */}
-          <aside className="lg:sticky lg:top-20 lg:h-fit">
+          <aside className="lg:sticky lg:top-20 lg:h-fit space-y-4">
             <ActionPanel property={property} fit={fit} />
+            <AdSlot placement="property-detail" size="sidebar" />
           </aside>
+
         </div>
 
         {/* Similar */}

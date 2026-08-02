@@ -1,3 +1,4 @@
+import { AdSlot } from "@/components/ads/ad-slot";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -158,6 +159,10 @@ function TenantDashboard() {
           to="/tenant/contracts"
         />
       </div>
+
+      <AdSlot placement="panel-soft" size="leaderboard" />
+
+
 
       {/* بازدیدهای پیش‌رو */}
       <section className="rounded-2xl border border-border bg-surface p-5">
