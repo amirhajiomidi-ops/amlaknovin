@@ -15,6 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PropertyCard } from "@/components/property/property-card";
+import { AdSlot } from "@/components/ads/ad-slot";
+import { useAppState } from "@/context/app-state";
+import { pinLimitedFeatured, rankWithPromotions } from "@/lib/ranking";
 import {
   cities,
   currentTenantFit,
@@ -23,6 +26,7 @@ import {
   type DealType,
 } from "@/data/properties";
 import { formatCompactTomans, toFaDigits } from "@/lib/format";
+
 
 export const Route = createFileRoute("/search")({
   head: () => ({
