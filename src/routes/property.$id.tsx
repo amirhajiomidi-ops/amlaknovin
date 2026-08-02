@@ -83,6 +83,9 @@ export const Route = createFileRoute("/property/$id")({
 function PropertyDetail() {
   const { property } = Route.useLoaderData() as { property: Property };
   const fit = currentTenantFit[property.id];
+  const { promotions } = useAppState();
+  const promo = activePromo(promotions, property.id);
+
 
   const similar = properties
     .filter(
