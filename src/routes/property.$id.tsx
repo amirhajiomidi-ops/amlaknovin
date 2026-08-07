@@ -45,6 +45,8 @@ import {
 } from "@/data/properties";
 import { formatCompactTomans, formatTomans, toFaDigits } from "@/lib/format";
 import { PropertyCard } from "@/components/property/property-card";
+import { BookingDialog } from "@/components/property/booking-dialog";
+import { OfferDialog } from "@/components/property/offer-dialog";
 
 export const Route = createFileRoute("/property/$id")({
   loader: ({ params }) => {
@@ -287,15 +289,25 @@ function PropertyDetail() {
               {formatCompactTomans(property.deposit)}
             </div>
           </div>
-          <Button className="flex-1" size="lg">
-            <Handshake className="size-4" aria-hidden />
-            ثبت پیشنهاد
-          </Button>
+          <OfferDialog
+            property={property}
+            trigger={
+              <Button className="flex-1" size="lg">
+                <Handshake className="size-4" aria-hidden />
+                ثبت پیشنهاد
+              </Button>
+            }
+          />
           {property.bookingEnabled ? (
-            <Button variant="outline" size="lg" className="flex-1">
-              <CalendarClock className="size-4" aria-hidden />
-              رزرو
-            </Button>
+            <BookingDialog
+              property={property}
+              trigger={
+                <Button variant="outline" size="lg" className="flex-1">
+                  <CalendarClock className="size-4" aria-hidden />
+                  رزرو
+                </Button>
+              }
+            />
           ) : null}
         </div>
       </div>
@@ -365,15 +377,25 @@ function ActionPanel({
         ) : null}
 
         <div className="space-y-2">
-          <Button size="lg" className="w-full">
-            <Handshake className="size-4" aria-hidden />
-            ثبت پیشنهاد
-          </Button>
+          <OfferDialog
+            property={property}
+            trigger={
+              <Button size="lg" className="w-full">
+                <Handshake className="size-4" aria-hidden />
+                ثبت پیشنهاد
+              </Button>
+            }
+          />
           {property.bookingEnabled ? (
-            <Button size="lg" variant="outline" className="w-full">
-              <CalendarClock className="size-4" aria-hidden />
-              رزرو بازدید
-            </Button>
+            <BookingDialog
+              property={property}
+              trigger={
+                <Button size="lg" variant="outline" className="w-full">
+                  <CalendarClock className="size-4" aria-hidden />
+                  رزرو بازدید
+                </Button>
+              }
+            />
           ) : (
             <div className="rounded-lg border border-dashed border-border bg-background p-3 text-center text-xs text-muted-foreground">
               نوبت‌دهی برای این فایل فعلاً غیرفعال است.
