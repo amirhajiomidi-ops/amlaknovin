@@ -18,7 +18,12 @@ import { Label } from "@/components/ui/label";
 import { useAppState } from "@/context/app-state";
 import type { Property } from "@/data/properties";
 import type { VisitBooking } from "@/data/tenant";
-import { formatJalali } from "@/lib/format";
+import {
+  faWeekdayShort,
+  formatJalali,
+  formatJalaliDay,
+  formatJalaliMonth,
+} from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 const SLOTS = [
@@ -152,6 +157,13 @@ export function BookingDialog({
                     selected={date}
                     onSelect={setDate}
                     disabled={(d) => d < today}
+                    dir="rtl"
+                    weekStartsOn={6}
+                    formatters={{
+                      formatCaption: (m) => formatJalaliMonth(m),
+                      formatWeekdayName: (d) => faWeekdayShort(d),
+                      formatDay: (d) => formatJalaliDay(d),
+                    }}
                     className={cn("pointer-events-auto mx-auto")}
                   />
                 </div>
