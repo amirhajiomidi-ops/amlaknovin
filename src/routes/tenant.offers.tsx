@@ -10,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { getProperty } from "@/data/properties";
 import {
   offerStatusLabels,
-  offers,
   type Offer,
   type OfferStatus,
 } from "@/data/tenant";
@@ -20,6 +19,7 @@ import {
   formatJalaliTime,
   toFaDigits,
 } from "@/lib/format";
+import { useAppState } from "@/context/app-state";
 
 export const Route = createFileRoute("/tenant/offers")({
   head: () => ({
@@ -48,6 +48,7 @@ const statusTone: Record<OfferStatus, string> = {
 };
 
 function OffersPage() {
+  const { offers } = useAppState();
   return (
     <div className="space-y-4">
       <div>

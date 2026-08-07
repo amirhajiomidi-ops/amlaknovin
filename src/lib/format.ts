@@ -45,3 +45,29 @@ export function formatJalaliTime(date: Date | string | number): string {
     minute: "2-digit",
   }).format(d);
 }
+
+// عنوان ماه شمسی برای تقویم (مثال: مرداد ۱۴۰۵)
+export function formatJalaliMonth(date: Date): string {
+  return new Intl.DateTimeFormat("fa-IR", {
+    calendar: "persian",
+    timeZone: "Asia/Tehran",
+    year: "numeric",
+    month: "long",
+  }).format(date);
+}
+
+// شماره روز شمسی برای خانه‌های تقویم
+export function formatJalaliDay(date: Date): string {
+  return new Intl.DateTimeFormat("fa-IR", {
+    calendar: "persian",
+    timeZone: "Asia/Tehran",
+    day: "numeric",
+  }).format(date);
+}
+
+export const FA_WEEKDAYS = ["ی", "د", "س", "چ", "پ", "ج", "ش"] as const;
+
+// نام کوتاه روز هفته بر اساس getDay (۰=یکشنبه)
+export function faWeekdayShort(date: Date): string {
+  return FA_WEEKDAYS[date.getDay()];
+}

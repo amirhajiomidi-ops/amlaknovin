@@ -8,11 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getProperty } from "@/data/properties";
 import {
   bookingStatusLabels,
-  visitBookings,
   type BookingStatus,
   type VisitBooking,
 } from "@/data/tenant";
 import { formatJalali } from "@/lib/format";
+import { useAppState } from "@/context/app-state";
 
 export const Route = createFileRoute("/tenant/bookings")({
   head: () => ({
@@ -33,6 +33,7 @@ export const Route = createFileRoute("/tenant/bookings")({
 });
 
 function BookingsPage() {
+  const { bookings: visitBookings } = useAppState();
   const upcoming = visitBookings.filter(
     (b) => b.status === "confirmed" || b.status === "requested",
   );
