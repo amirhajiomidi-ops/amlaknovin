@@ -10,6 +10,7 @@ import {
   FileSignature,
   Handshake,
   LayoutDashboard,
+  UserRound,
   Wallet,
 } from "lucide-react";
 
@@ -43,7 +44,8 @@ const navItems: ReadonlyArray<{
     | "/landlord/bookings"
     | "/landlord/offers"
     | "/landlord/contracts"
-    | "/landlord/wallet";
+    | "/landlord/wallet"
+    | "/landlord/profile";
   label: string;
   icon: typeof LayoutDashboard;
   exact?: boolean;
@@ -54,6 +56,7 @@ const navItems: ReadonlyArray<{
   { to: "/landlord/offers", label: "پیشنهادها", icon: Handshake },
   { to: "/landlord/contracts", label: "قراردادها", icon: FileSignature },
   { to: "/landlord/wallet", label: "کیف پول", icon: Wallet },
+  { to: "/landlord/profile", label: "پروفایل و احراز هویت", icon: UserRound },
 ];
 
 function LandlordLayout() {
