@@ -48,7 +48,7 @@ export function OfferDialog({
   const handleOpenChange = (next: boolean) => {
     if (next && !user) {
       toast.info("برای ثبت پیشنهاد ابتدا وارد حساب کاربری شوید.");
-      void navigate({ to: "/auth" });
+      void navigate({ to: "/auth", search: { mode: "login" } });
       return;
     }
     setOpen(next);
