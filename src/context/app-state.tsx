@@ -33,6 +33,8 @@ export interface AppUser {
   fullName: string;
   phone: string;
   role: UserRole;
+  identityVerified?: boolean;
+  nationalId?: string;
 }
 
 interface AppStateValue {
@@ -40,6 +42,9 @@ interface AppStateValue {
   user: AppUser | null;
   signIn: (user: AppUser) => void;
   signOut: () => void;
+  verifyIdentity: (nationalId: string) => void;
+  findAccount: (phone: string) => AppUser | null;
+
   // کیف پول
   balance: number;
   transactions: WalletTransaction[];
