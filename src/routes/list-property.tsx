@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CheckCircle2,
   ChevronLeft,
@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAppState } from "@/context/app-state";
 import { cities, neighborhoodsByCity } from "@/data/properties";
 import { formatCompactTomans, toFaDigits } from "@/lib/format";
 
@@ -121,12 +122,19 @@ const initialForm: FormState = {
 };
 
 function ListPropertyPage() {
+  const { user } = useAppState();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(initialForm);
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (user?.nationalId) {
+      setForm((f) => (f.nationalId ? f : { ...f, nationalId: user.nationalId! }));
+    }
+  }, [user?.nationalId]);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -170,6 +178,14 @@ function ListPropertyPage() {
       setDone(true);
     }, 1200);
   };
+
+  if (!user) {
+    return <AuthGate />;
+  }
+
+  if (user.role === "landlord" && !user.identityVerified) {
+    return <VerifyGate />;
+  }
 
   if (!started) {
     return <Intro onStart={() => setStarted(true)} />;
@@ -794,6 +810,58 @@ function Intro({ onStart }: { onStart: () => void }) {
           </CardContent>
         </Card>
       </section>
+    </div>
+  );
+}
+
+function AuthGate() {
+  return (
+    <div className="app-container py-14">
+      <Card className="mx-auto max-w-xl">
+        <CardContent className="space-y-4 p-8 text-center">
+          <ShieldCheck className="mx-auto size-12 text-primary" aria-hidden />
+          <h1 className="text-xl font-bold text-foreground">
+            برای ثبت آگهی وارد حساب کاربری شوید
+          </h1>
+          <p className="text-sm leading-7 text-muted-foreground">
+            ثبت آگهی فقط برای کاربران دارای حساب موجر امکان‌پذیر است.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button asChild>
+              <Link to="/auth" search={{ mode: "login" }}>
+                ورود
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/auth" search={{ mode: "signup" }}>
+                ثبت‌نام موجر
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function VerifyGate() {
+  return (
+    <div className="app-container py-14">
+      <Card className="mx-auto max-w-xl border-warning/30 bg-warning-soft/40">
+        <CardContent className="space-y-4 p-8 text-center">
+          <ShieldCheck className="mx-auto size-12 text-warning" aria-hidden />
+          <h1 className="text-xl font-bold text-foreground">
+            ابتدا هویت خود را احراز کنید
+          </h1>
+          <p className="text-sm leading-7 text-muted-foreground">
+            برای ثبت آگهی ملک، باید در بخش پروفایل کد ملی خود را وارد و هویتتان را
+            تأیید کنید.
+          </p>
+          <Button asChild>
+            <Link to="/landlord/profile">رفتن به پروفایل و ثبت کد ملی</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -65,7 +65,7 @@ export function BookingDialog({
   const handleOpenChange = (next: boolean) => {
     if (next && !user) {
       toast.info("برای رزرو بازدید ابتدا وارد حساب کاربری شوید.");
-      void navigate({ to: "/auth" });
+      void navigate({ to: "/auth", search: { mode: "login" } });
       return;
     }
     setOpen(next);

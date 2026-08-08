@@ -26,6 +26,7 @@ import { Route as TenantBookingsRouteImport } from './routes/tenant.bookings'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as LandlordWalletRouteImport } from './routes/landlord.wallet'
 import { Route as LandlordPropertiesRouteImport } from './routes/landlord.properties'
+import { Route as LandlordProfileRouteImport } from './routes/landlord.profile'
 import { Route as LandlordOffersRouteImport } from './routes/landlord.offers'
 import { Route as LandlordContractsRouteImport } from './routes/landlord.contracts'
 import { Route as LandlordBookingsRouteImport } from './routes/landlord.bookings'
@@ -116,6 +117,11 @@ const LandlordPropertiesRoute = LandlordPropertiesRouteImport.update({
   path: '/properties',
   getParentRoute: () => LandlordRoute,
 } as any)
+const LandlordProfileRoute = LandlordProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => LandlordRoute,
+} as any)
 const LandlordOffersRoute = LandlordOffersRouteImport.update({
   id: '/offers',
   path: '/offers',
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/landlord/bookings': typeof LandlordBookingsRoute
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
+  '/landlord/profile': typeof LandlordProfileRoute
   '/landlord/properties': typeof LandlordPropertiesRoute
   '/landlord/wallet': typeof LandlordWalletRoute
   '/property/$id': typeof PropertyIdRoute
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/landlord/bookings': typeof LandlordBookingsRoute
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
+  '/landlord/profile': typeof LandlordProfileRoute
   '/landlord/properties': typeof LandlordPropertiesRoute
   '/landlord/wallet': typeof LandlordWalletRoute
   '/property/$id': typeof PropertyIdRoute
@@ -194,6 +202,7 @@ export interface FileRoutesById {
   '/landlord/bookings': typeof LandlordBookingsRoute
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
+  '/landlord/profile': typeof LandlordProfileRoute
   '/landlord/properties': typeof LandlordPropertiesRoute
   '/landlord/wallet': typeof LandlordWalletRoute
   '/property/$id': typeof PropertyIdRoute
@@ -219,6 +228,7 @@ export interface FileRouteTypes {
     | '/landlord/bookings'
     | '/landlord/contracts'
     | '/landlord/offers'
+    | '/landlord/profile'
     | '/landlord/properties'
     | '/landlord/wallet'
     | '/property/$id'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/landlord/bookings'
     | '/landlord/contracts'
     | '/landlord/offers'
+    | '/landlord/profile'
     | '/landlord/properties'
     | '/landlord/wallet'
     | '/property/$id'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/landlord/bookings'
     | '/landlord/contracts'
     | '/landlord/offers'
+    | '/landlord/profile'
     | '/landlord/properties'
     | '/landlord/wallet'
     | '/property/$id'
@@ -408,6 +420,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandlordPropertiesRouteImport
       parentRoute: typeof LandlordRoute
     }
+    '/landlord/profile': {
+      id: '/landlord/profile'
+      path: '/profile'
+      fullPath: '/landlord/profile'
+      preLoaderRoute: typeof LandlordProfileRouteImport
+      parentRoute: typeof LandlordRoute
+    }
     '/landlord/offers': {
       id: '/landlord/offers'
       path: '/offers'
@@ -443,6 +462,7 @@ interface LandlordRouteChildren {
   LandlordBookingsRoute: typeof LandlordBookingsRoute
   LandlordContractsRoute: typeof LandlordContractsRoute
   LandlordOffersRoute: typeof LandlordOffersRoute
+  LandlordProfileRoute: typeof LandlordProfileRoute
   LandlordPropertiesRoute: typeof LandlordPropertiesRoute
   LandlordWalletRoute: typeof LandlordWalletRoute
   LandlordIndexRoute: typeof LandlordIndexRoute
@@ -452,6 +472,7 @@ const LandlordRouteChildren: LandlordRouteChildren = {
   LandlordBookingsRoute: LandlordBookingsRoute,
   LandlordContractsRoute: LandlordContractsRoute,
   LandlordOffersRoute: LandlordOffersRoute,
+  LandlordProfileRoute: LandlordProfileRoute,
   LandlordPropertiesRoute: LandlordPropertiesRoute,
   LandlordWalletRoute: LandlordWalletRoute,
   LandlordIndexRoute: LandlordIndexRoute,
@@ -496,13 +517,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

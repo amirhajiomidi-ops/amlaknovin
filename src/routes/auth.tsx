@@ -50,7 +50,7 @@ type Step = "phone" | "otp" | "profile";
 function AuthPage() {
   const { mode } = Route.useSearch();
   const navigate = useNavigate();
-  const { signIn } = useAppState();
+  const { signIn, findAccount } = useAppState();
 
   const [step, setStep] = useState<Step>("phone");
   const [phone, setPhone] = useState("");
@@ -97,14 +97,19 @@ function AuthPage() {
       setLoading(false);
       if (mode === "signup") {
         setStep("profile");
-      } else {
-        signIn({
-          fullName: role === "landlord" ? "کامران راد" : "نگین شریفی",
-          phone,
-          role,
-        });
-        navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
+        return;
       }
+      // ورود: نقش از حساب قبلی خوانده می‌شود (پیش‌فرض: مستأجر)
+      const account = findAccount(phone);
+      const nextRole: UserRole = account?.role ?? "tenant";
+      signIn(
+        account ?? {
+          fullName: "کاربر املاک",
+          phone,
+          role: nextRole,
+        },
+      );
+      navigate({ to: nextRole === "landlord" ? "/landlord" : "/tenant" });
     }, 700);
   };
 
@@ -114,9 +119,10 @@ function AuthPage() {
       return;
     }
     setError(null);
-    signIn({ fullName: fullName.trim(), phone, role });
+    signIn({ fullName: fullName.trim(), phone, role, identityVerified: false });
     navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
   };
+
 
   return (
     <div className="app-container py-10 md:py-16">
@@ -213,7 +219,10 @@ function AuthPage() {
                 </div>
               </div>
 
-              <RolePicker role={role} onChange={setRole} />
+              {mode === "signup" ? (
+                <RolePicker role={role} onChange={setRole} />
+              ) : null}
+
 
               {error ? <ErrorBox text={error} /> : null}
 
