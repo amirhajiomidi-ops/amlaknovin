@@ -244,6 +244,8 @@ const ACCOUNTS_KEY = "amlak-accounts";
       user,
       signIn,
       signOut,
+      verifyIdentity,
+      findAccount,
       balance,
       transactions,
       topUp,
@@ -262,6 +264,9 @@ const ACCOUNTS_KEY = "amlak-accounts";
       user,
       signIn,
       signOut,
+      verifyIdentity,
+      findAccount,
+
       balance,
       transactions,
       topUp,
