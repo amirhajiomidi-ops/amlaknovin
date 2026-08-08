@@ -152,8 +152,33 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+const ACCOUNTS_KEY = "amlak-accounts";
+
+  const persistAccount = (u: AppUser) => {
+    try {
+      const raw = localStorage.getItem(ACCOUNTS_KEY);
+      const map = raw ? (JSON.parse(raw) as Record<string, AppUser>) : {};
+      map[u.phone] = u;
+      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(map));
+    } catch {
+      /* noop */
+    }
+  };
+
+  const findAccount = useCallback<AppStateValue["findAccount"]>((phone) => {
+    try {
+      const raw = localStorage.getItem(ACCOUNTS_KEY);
+      if (!raw) return null;
+      const map = JSON.parse(raw) as Record<string, AppUser>;
+      return map[phone] ?? null;
+    } catch {
+      return null;
+    }
+  }, []);
+
   const signIn = useCallback((u: AppUser) => {
     setUser(u);
+    persistAccount(u);
     try {
       sessionStorage.setItem("amlak-user", JSON.stringify(u));
     } catch {
@@ -168,6 +193,21 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       /* noop */
     }
   }, []);
+
+  const verifyIdentity = useCallback((nationalId: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, identityVerified: true, nationalId };
+      persistAccount(next);
+      try {
+        sessionStorage.setItem("amlak-user", JSON.stringify(next));
+      } catch {
+        /* noop */
+      }
+      return next;
+    });
+  }, []);
+
 
   const topUp = useCallback(
     (amount: number) => {
