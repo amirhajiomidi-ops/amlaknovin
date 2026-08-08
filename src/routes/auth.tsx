@@ -219,7 +219,10 @@ function AuthPage() {
                 </div>
               </div>
 
-              <RolePicker role={role} onChange={setRole} />
+              {mode === "signup" ? (
+                <RolePicker role={role} onChange={setRole} />
+              ) : null}
+
 
               {error ? <ErrorBox text={error} /> : null}
 
