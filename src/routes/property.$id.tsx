@@ -88,8 +88,14 @@ export const Route = createFileRoute("/property/$id")({
 function PropertyDetail() {
   const { property } = Route.useLoaderData() as { property: Property };
   const fit = currentTenantFit[property.id];
-  const { promotions } = useAppState();
+  const { promotions, user } = useAppState();
   const promo = activePromo(promotions, property.id);
+  const tenantBlocked = user?.role === "tenant" && !user.identityVerified;
+
+  if (tenantBlocked) {
+    return <TenantVerificationGate />;
+  }
+
 
 
   const similar = properties
@@ -613,6 +619,36 @@ function PropertyNotFound() {
           <Link to="/search">بازگشت به جست‌وجو</Link>
         </Button>
       </div>
+    </div>
+  );
+}
+
+function TenantVerificationGate() {
+  return (
+    <div className="app-container py-12">
+      <Card className="mx-auto max-w-xl border-warning/30 bg-surface text-center shadow-elevated">
+        <CardContent className="space-y-4 p-8">
+          <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-warning-soft text-warning">
+            <ShieldAlert className="size-7" aria-hidden />
+          </div>
+          <h1 className="text-xl font-bold text-foreground">
+            برای مشاهده جزئیات آگهی، احراز هویت را کامل کنید
+          </h1>
+          <p className="text-sm leading-7 text-muted-foreground">
+            مشاهده جزئیات فایل، ثبت پیشنهاد و رزرو بازدید تنها برای مستأجران
+            احرازهویت‌شده فعال است. کافی است در «پروفایل مالی» کد ملی و مدرک
+            اعتبارسنجی خود را ثبت کنید.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button asChild size="lg">
+              <Link to="/tenant/profile">تکمیل پروفایل و احراز هویت</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/search">بازگشت به جست‌وجو</Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

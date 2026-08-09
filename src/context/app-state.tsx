@@ -37,12 +37,20 @@ export interface AppUser {
   nationalId?: string;
 }
 
+export interface TenantDocs {
+  payslip: string | null;
+  credit: string | null;
+}
+
 interface AppStateValue {
   // احراز هویت شبیه‌سازی‌شده
   user: AppUser | null;
   signIn: (user: AppUser) => void;
   signOut: () => void;
   verifyIdentity: (nationalId: string) => void;
+  // مدارک مستأجر (شبیه‌سازی بارگذاری)
+  tenantDocs: TenantDocs;
+  setTenantDoc: (key: keyof TenantDocs, name: string) => void;
   findAccount: (phone: string) => AppUser | null;
 
   // کیف پول
@@ -208,6 +216,36 @@ const ACCOUNTS_KEY = "amlak-accounts";
     });
   }, []);
 
+  const [tenantDocs, setTenantDocs] = useState<TenantDocs>({
+    payslip: null,
+    credit: null,
+  });
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("amlak-tenant-docs");
+      if (raw) setTenantDocs(JSON.parse(raw) as TenantDocs);
+    } catch {
+      /* noop */
+    }
+  }, []);
+
+  const setTenantDoc = useCallback<AppStateValue["setTenantDoc"]>(
+    (key, name) => {
+      setTenantDocs((prev) => {
+        const next = { ...prev, [key]: name };
+        try {
+          sessionStorage.setItem("amlak-tenant-docs", JSON.stringify(next));
+        } catch {
+          /* noop */
+        }
+        return next;
+      });
+    },
+    [],
+  );
+
+
 
   const topUp = useCallback(
     (amount: number) => {
@@ -245,6 +283,8 @@ const ACCOUNTS_KEY = "amlak-accounts";
       signIn,
       signOut,
       verifyIdentity,
+      tenantDocs,
+      setTenantDoc,
       findAccount,
       balance,
       transactions,
@@ -265,6 +305,8 @@ const ACCOUNTS_KEY = "amlak-accounts";
       signIn,
       signOut,
       verifyIdentity,
+      tenantDocs,
+      setTenantDoc,
       findAccount,
 
       balance,

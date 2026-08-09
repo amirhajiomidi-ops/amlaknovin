@@ -68,7 +68,13 @@ export function BookingDialog({
       void navigate({ to: "/auth", search: { mode: "login" } });
       return;
     }
+    if (next && user?.role === "tenant" && !user.identityVerified) {
+      toast.warning("برای رزرو بازدید ابتدا احراز هویت را در پروفایل مالی کامل کنید.");
+      void navigate({ to: "/tenant/profile" });
+      return;
+    }
     setOpen(next);
+
     if (!next) setTimeout(reset, 200);
   };
 

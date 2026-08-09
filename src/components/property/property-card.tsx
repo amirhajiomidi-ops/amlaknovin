@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   BadgeCheck,
@@ -24,7 +25,11 @@ interface Props {
 
 export function PropertyCard({ property, fit }: Props) {
   const { promotions } = useAppState();
-  const promo = activePromo(promotions, property.id);
+  // طرح‌های ارتقا وابسته به زمان هستند؛ برای جلوگیری از اختلاف SSR/CSR فقط پس از mount نمایش می‌دهیم.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const promo = mounted ? activePromo(promotions, property.id) : undefined;
+
   const isMortgage = property.dealType === "mortgage";
   const statusTone: Record<Property["status"], string> = {
     published: "bg-success-soft text-success border-success/30",
