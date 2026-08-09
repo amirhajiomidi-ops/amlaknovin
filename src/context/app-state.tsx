@@ -305,6 +305,8 @@ const ACCOUNTS_KEY = "amlak-accounts";
       signIn,
       signOut,
       verifyIdentity,
+      tenantDocs,
+      setTenantDoc,
       findAccount,
 
       balance,
