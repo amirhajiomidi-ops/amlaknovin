@@ -37,6 +37,11 @@ export interface AppUser {
   nationalId?: string;
 }
 
+export interface TenantDocs {
+  payslip: string | null;
+  credit: string | null;
+}
+
 interface AppStateValue {
   // احراز هویت شبیه‌سازی‌شده
   user: AppUser | null;
