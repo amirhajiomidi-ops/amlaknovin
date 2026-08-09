@@ -43,6 +43,9 @@ interface AppStateValue {
   signIn: (user: AppUser) => void;
   signOut: () => void;
   verifyIdentity: (nationalId: string) => void;
+  // مدارک مستأجر (شبیه‌سازی بارگذاری)
+  tenantDocs: TenantDocs;
+  setTenantDoc: (key: keyof TenantDocs, name: string) => void;
   findAccount: (phone: string) => AppUser | null;
 
   // کیف پول
