@@ -344,7 +344,7 @@ function RolePicker({
   return (
     <div className="space-y-2">
       <Label>نقش شما</Label>
-      <div className="grid grid-cols-2 gap-2">
+      <div role="radiogroup" className="grid grid-cols-2 gap-2">
         {options.map((o) => {
           const Icon = o.icon;
           const active = role === o.id;
@@ -352,18 +352,28 @@ function RolePicker({
             <button
               key={o.id}
               type="button"
+              role="radio"
+              aria-checked={active}
               onClick={() => onChange(o.id)}
-              className={`rounded-xl border p-3 text-start transition-colors ${
+              className={`relative rounded-xl border-2 p-3 text-start transition-colors ${
                 active
-                  ? "border-primary bg-primary-soft"
+                  ? "border-primary bg-primary-soft ring-2 ring-primary/25"
                   : "border-border bg-background hover:bg-secondary"
               }`}
             >
+              {active ? (
+                <BadgeCheck
+                  className="absolute start-2 top-2 size-4 text-primary"
+                  aria-hidden
+                />
+              ) : null}
               <Icon
                 className={`size-4 ${active ? "text-primary" : "text-muted-foreground"}`}
                 aria-hidden
               />
-              <div className="mt-2 text-sm font-semibold text-foreground">
+              <div
+                className={`mt-2 text-sm font-semibold ${active ? "text-primary" : "text-foreground"}`}
+              >
                 {o.title}
               </div>
               <div className="text-[11px] text-muted-foreground">{o.body}</div>
@@ -374,6 +384,7 @@ function RolePicker({
     </div>
   );
 }
+
 
 function ErrorBox({ text }: { text: string }) {
   return (
