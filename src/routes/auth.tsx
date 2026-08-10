@@ -45,7 +45,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-type Step = "phone" | "otp" | "profile";
+type Step = "phone" | "otp";
 
 function AuthPage() {
   const { mode } = Route.useSearch();
@@ -73,6 +73,10 @@ function AuthPage() {
       setError("شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد.");
       return;
     }
+    if (mode === "signup" && fullName.trim().length < 3) {
+      setError("نام و نام خانوادگی را کامل وارد کنید.");
+      return;
+    }
     setError(null);
     setLoading(true);
     window.setTimeout(() => {
@@ -96,7 +100,13 @@ function AuthPage() {
     window.setTimeout(() => {
       setLoading(false);
       if (mode === "signup") {
-        setStep("profile");
+        signIn({
+          fullName: fullName.trim(),
+          phone,
+          role,
+          identityVerified: false,
+        });
+        navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
         return;
       }
       // ورود: نقش از حساب قبلی خوانده می‌شود (پیش‌فرض: مستأجر)
@@ -113,15 +123,7 @@ function AuthPage() {
     }, 700);
   };
 
-  const finishSignup = () => {
-    if (fullName.trim().length < 3) {
-      setError("نام و نام خانوادگی را کامل وارد کنید.");
-      return;
-    }
-    setError(null);
-    signIn({ fullName: fullName.trim(), phone, role, identityVerified: false });
-    navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
-  };
+
 
 
   return (
@@ -176,9 +178,9 @@ function AuthPage() {
           </div>
 
           <ol className="mb-6 flex items-center gap-2 text-[11px] text-muted-foreground">
-            {["شماره موبایل", "کد تأیید", mode === "signup" ? "تکمیل پروفایل" : "ورود"].map(
+            {[mode === "signup" ? "اطلاعات حساب" : "شماره موبایل", "کد تأیید"].map(
               (label, i) => {
-                const idx = ["phone", "otp", "profile"].indexOf(step);
+                const idx = ["phone", "otp"].indexOf(step);
                 const active = i <= idx;
                 return (
                   <li key={label} className="flex flex-1 items-center gap-2">
@@ -220,8 +222,21 @@ function AuthPage() {
               </div>
 
               {mode === "signup" ? (
-                <RolePicker role={role} onChange={setRole} />
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="name">نام و نام خانوادگی</Label>
+                    <Input
+                      id="name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="مثلاً نگین شریفی"
+                    />
+                  </div>
+                  <RolePicker role={role} onChange={setRole} />
+                </>
               ) : null}
+
+
 
 
               {error ? <ErrorBox text={error} /> : null}
@@ -294,24 +309,6 @@ function AuthPage() {
             </div>
           ) : null}
 
-          {step === "profile" ? (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">نام و نام خانوادگی</Label>
-                <Input
-                  id="name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="مثلاً نگین شریفی"
-                />
-              </div>
-              <RolePicker role={role} onChange={setRole} />
-              {error ? <ErrorBox text={error} /> : null}
-              <Button className="w-full" onClick={finishSignup}>
-                ساخت حساب و ورود
-              </Button>
-            </div>
-          ) : null}
         </div>
       </div>
     </div>
