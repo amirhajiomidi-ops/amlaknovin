@@ -45,7 +45,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-type Step = "phone" | "otp" | "profile";
+type Step = "phone" | "otp";
 
 function AuthPage() {
   const { mode } = Route.useSearch();
@@ -73,6 +73,10 @@ function AuthPage() {
       setError("شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد.");
       return;
     }
+    if (mode === "signup" && fullName.trim().length < 3) {
+      setError("نام و نام خانوادگی را کامل وارد کنید.");
+      return;
+    }
     setError(null);
     setLoading(true);
     window.setTimeout(() => {
@@ -96,7 +100,13 @@ function AuthPage() {
     window.setTimeout(() => {
       setLoading(false);
       if (mode === "signup") {
-        setStep("profile");
+        signIn({
+          fullName: fullName.trim(),
+          phone,
+          role,
+          identityVerified: false,
+        });
+        navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
         return;
       }
       // ورود: نقش از حساب قبلی خوانده می‌شود (پیش‌فرض: مستأجر)
@@ -113,15 +123,7 @@ function AuthPage() {
     }, 700);
   };
 
-  const finishSignup = () => {
-    if (fullName.trim().length < 3) {
-      setError("نام و نام خانوادگی را کامل وارد کنید.");
-      return;
-    }
-    setError(null);
-    signIn({ fullName: fullName.trim(), phone, role, identityVerified: false });
-    navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
-  };
+
 
 
   return (
