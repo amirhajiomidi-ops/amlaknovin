@@ -46,6 +46,7 @@ import {
 import { formatCompactTomans, formatTomans, toFaDigits } from "@/lib/format";
 import { PropertyCard } from "@/components/property/property-card";
 import { BookingDialog } from "@/components/property/booking-dialog";
+import { VisitAvailability } from "@/components/property/visit-availability";
 import { OfferDialog } from "@/components/property/offer-dialog";
 
 export const Route = createFileRoute("/property/$id")({
@@ -381,6 +382,8 @@ function ActionPanel({
             </div>
           </div>
         ) : null}
+
+        {property.bookingEnabled ? <VisitAvailability property={property} /> : null}
 
         <div className="space-y-2">
           <OfferDialog

@@ -25,14 +25,7 @@ import {
   formatJalaliMonth,
 } from "@/lib/format";
 import { cn } from "@/lib/utils";
-
-const SLOTS = [
-  "۱۰:۰۰ تا ۱۱:۰۰",
-  "۱۲:۰۰ تا ۱۳:۰۰",
-  "۱۵:۰۰ تا ۱۶:۰۰",
-  "۱۶:۳۰ تا ۱۷:۳۰",
-  "۱۸:۰۰ تا ۱۹:۰۰",
-];
+import { dateKey } from "@/data/availability";
 
 export function BookingDialog({
   property,
@@ -41,7 +34,7 @@ export function BookingDialog({
   property: Property;
   trigger: ReactNode;
 }) {
-  const { user, addBooking } = useAppState();
+  const { user, addBooking, availability, bookings } = useAppState();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>();
@@ -54,6 +47,25 @@ export function BookingDialog({
     d.setHours(0, 0, 0, 0);
     return d;
   }, []);
+
+  const days = availability[property.id] ?? {};
+
+  // بازه‌های رزروشده هر روز برای این آگهی
+  const bookedByDay = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    bookings
+      .filter((b) => b.propertyId === property.id && b.status !== "cancelled")
+      .forEach((b) => {
+        const k = dateKey(b.date);
+        map[k] = [...(map[k] ?? []), b.slot];
+      });
+    return map;
+  }, [bookings, property.id]);
+
+  const dayKey = date ? dateKey(date) : null;
+  const openSlots = dayKey
+    ? (days[dayKey] ?? []).filter((s) => !(bookedByDay[dayKey] ?? []).includes(s))
+    : [];
 
   const reset = () => {
     setDate(undefined);
@@ -161,8 +173,17 @@ export function BookingDialog({
                   <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={setDate}
-                    disabled={(d) => d < today}
+                    onSelect={(d) => {
+                      setDate(d);
+                      setSlot(null);
+                    }}
+                    disabled={(d) =>
+                      d < today || (days[dateKey(d)]?.length ?? 0) === 0
+                    }
+                    modifiers={{ hasSlots: (d) => (days[dateKey(d)]?.length ?? 0) > 0 }}
+                    modifiersClassNames={{
+                      hasSlots: "bg-primary-soft text-primary font-semibold rounded-md",
+                    }}
                     dir="rtl"
                     weekStartsOn={6}
                     formatters={{
@@ -182,17 +203,27 @@ export function BookingDialog({
 
               <div className="space-y-2">
                 <Label>بازه زمانی</Label>
-                <div className="flex flex-wrap gap-2">
-                  {SLOTS.map((s) => (
-                    <ChoiceChip
-                      key={s}
-                      active={slot === s}
-                      onClick={() => setSlot(s)}
-                    >
-                      {s}
-                    </ChoiceChip>
-                  ))}
-                </div>
+                {!date ? (
+                  <p className="text-xs text-muted-foreground">
+                    ابتدا یکی از روزهای فعال تقویم را انتخاب کنید.
+                  </p>
+                ) : openSlots.length === 0 ? (
+                  <p className="text-xs text-warning">
+                    برای این روز بازه آزادی باقی نمانده است.
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {openSlots.map((s) => (
+                      <ChoiceChip
+                        key={s}
+                        active={slot === s}
+                        onClick={() => setSlot(s)}
+                      >
+                        {s}
+                      </ChoiceChip>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

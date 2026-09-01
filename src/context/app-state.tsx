@@ -26,6 +26,12 @@ import {
   type Offer,
   type VisitBooking,
 } from "@/data/tenant";
+import { landlordPropertyIds } from "@/data/landlord";
+import {
+  seedAvailability,
+  type AvailabilityMap,
+  type DayAvailability,
+} from "@/data/availability";
 
 export type UserRole = "tenant" | "landlord";
 
@@ -67,6 +73,9 @@ interface AppStateValue {
   // بازدیدها و پیشنهادهای مستأجر
   bookings: VisitBooking[];
   offers: Offer[];
+  // تقویم بازدید هر آگهی
+  availability: AvailabilityMap;
+  setPropertyAvailability: (propertyId: string, days: DayAvailability) => void;
   addBooking: (input: {
     propertyId: string;
     date: string;
@@ -107,6 +116,35 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     useState<Record<string, ActivePromotion>>(initialPromotions);
   const [bookings, setBookings] = useState<VisitBooking[]>(initialBookings);
   const [offers, setOffers] = useState<Offer[]>(initialOffers);
+  const [availability, setAvailability] = useState<AvailabilityMap>({});
+
+  // تقویم پیش‌فرض فقط در کلاینت ساخته می‌شود تا با SSR ناسازگار نشود
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("amlak-availability");
+      if (raw) {
+        setAvailability(JSON.parse(raw) as AvailabilityMap);
+        return;
+      }
+    } catch {
+      /* noop */
+    }
+    setAvailability(seedAvailability(landlordPropertyIds));
+  }, []);
+
+  const setPropertyAvailability = useCallback<
+    AppStateValue["setPropertyAvailability"]
+  >((propertyId, days) => {
+    setAvailability((prev) => {
+      const next = { ...prev, [propertyId]: days };
+      try {
+        sessionStorage.setItem("amlak-availability", JSON.stringify(next));
+      } catch {
+        /* noop */
+      }
+      return next;
+    });
+  }, []);
 
   const addBooking = useCallback<AppStateValue["addBooking"]>((input) => {
     const booking: VisitBooking = {
@@ -295,12 +333,16 @@ const ACCOUNTS_KEY = "amlak-accounts";
       offers,
       addBooking,
       addOffer,
+      availability,
+      setPropertyAvailability,
     }),
     [
       bookings,
       offers,
       addBooking,
       addOffer,
+      availability,
+      setPropertyAvailability,
       user,
       signIn,
       signOut,

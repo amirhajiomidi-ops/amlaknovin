@@ -7,6 +7,7 @@ import {
 import {
   Building2,
   CalendarClock,
+  CalendarRange,
   FileSignature,
   Handshake,
   LayoutDashboard,
@@ -42,6 +43,7 @@ const navItems: ReadonlyArray<{
     | "/landlord"
     | "/landlord/properties"
     | "/landlord/bookings"
+    | "/landlord/availability"
     | "/landlord/offers"
     | "/landlord/contracts"
     | "/landlord/wallet"
@@ -53,6 +55,7 @@ const navItems: ReadonlyArray<{
   { to: "/landlord", label: "نمای کلی", icon: LayoutDashboard, exact: true },
   { to: "/landlord/properties", label: "ملک‌های من", icon: Building2 },
   { to: "/landlord/bookings", label: "درخواست بازدید", icon: CalendarClock },
+  { to: "/landlord/availability", label: "تقویم بازدید", icon: CalendarRange },
   { to: "/landlord/offers", label: "پیشنهادها", icon: Handshake },
   { to: "/landlord/contracts", label: "قراردادها", icon: FileSignature },
   { to: "/landlord/wallet", label: "کیف پول", icon: Wallet },
