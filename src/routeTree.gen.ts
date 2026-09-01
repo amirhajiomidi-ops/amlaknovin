@@ -30,6 +30,7 @@ import { Route as LandlordProfileRouteImport } from './routes/landlord.profile'
 import { Route as LandlordOffersRouteImport } from './routes/landlord.offers'
 import { Route as LandlordContractsRouteImport } from './routes/landlord.contracts'
 import { Route as LandlordBookingsRouteImport } from './routes/landlord.bookings'
+import { Route as LandlordAvailabilityRouteImport } from './routes/landlord.availability'
 import { Route as AdminAdsRouteImport } from './routes/admin.ads'
 
 const TenantRoute = TenantRouteImport.update({
@@ -137,6 +138,11 @@ const LandlordBookingsRoute = LandlordBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => LandlordRoute,
 } as any)
+const LandlordAvailabilityRoute = LandlordAvailabilityRouteImport.update({
+  id: '/availability',
+  path: '/availability',
+  getParentRoute: () => LandlordRoute,
+} as any)
 const AdminAdsRoute = AdminAdsRouteImport.update({
   id: '/admin/ads',
   path: '/admin/ads',
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/tenant': typeof TenantRouteWithChildren
   '/admin/ads': typeof AdminAdsRoute
+  '/landlord/availability': typeof LandlordAvailabilityRoute
   '/landlord/bookings': typeof LandlordBookingsRoute
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/list-property': typeof ListPropertyRoute
   '/search': typeof SearchRoute
   '/admin/ads': typeof AdminAdsRoute
+  '/landlord/availability': typeof LandlordAvailabilityRoute
   '/landlord/bookings': typeof LandlordBookingsRoute
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/tenant': typeof TenantRouteWithChildren
   '/admin/ads': typeof AdminAdsRoute
+  '/landlord/availability': typeof LandlordAvailabilityRoute
   '/landlord/bookings': typeof LandlordBookingsRoute
   '/landlord/contracts': typeof LandlordContractsRoute
   '/landlord/offers': typeof LandlordOffersRoute
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/tenant'
     | '/admin/ads'
+    | '/landlord/availability'
     | '/landlord/bookings'
     | '/landlord/contracts'
     | '/landlord/offers'
@@ -247,6 +257,7 @@ export interface FileRouteTypes {
     | '/list-property'
     | '/search'
     | '/admin/ads'
+    | '/landlord/availability'
     | '/landlord/bookings'
     | '/landlord/contracts'
     | '/landlord/offers'
@@ -271,6 +282,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/tenant'
     | '/admin/ads'
+    | '/landlord/availability'
     | '/landlord/bookings'
     | '/landlord/contracts'
     | '/landlord/offers'
@@ -448,6 +460,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandlordBookingsRouteImport
       parentRoute: typeof LandlordRoute
     }
+    '/landlord/availability': {
+      id: '/landlord/availability'
+      path: '/availability'
+      fullPath: '/landlord/availability'
+      preLoaderRoute: typeof LandlordAvailabilityRouteImport
+      parentRoute: typeof LandlordRoute
+    }
     '/admin/ads': {
       id: '/admin/ads'
       path: '/admin/ads'
@@ -459,6 +478,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface LandlordRouteChildren {
+  LandlordAvailabilityRoute: typeof LandlordAvailabilityRoute
   LandlordBookingsRoute: typeof LandlordBookingsRoute
   LandlordContractsRoute: typeof LandlordContractsRoute
   LandlordOffersRoute: typeof LandlordOffersRoute
@@ -469,6 +489,7 @@ interface LandlordRouteChildren {
 }
 
 const LandlordRouteChildren: LandlordRouteChildren = {
+  LandlordAvailabilityRoute: LandlordAvailabilityRoute,
   LandlordBookingsRoute: LandlordBookingsRoute,
   LandlordContractsRoute: LandlordContractsRoute,
   LandlordOffersRoute: LandlordOffersRoute,
