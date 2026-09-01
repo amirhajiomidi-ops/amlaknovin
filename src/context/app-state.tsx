@@ -26,6 +26,12 @@ import {
   type Offer,
   type VisitBooking,
 } from "@/data/tenant";
+import { landlordPropertyIds } from "@/data/landlord";
+import {
+  seedAvailability,
+  type AvailabilityMap,
+  type DayAvailability,
+} from "@/data/availability";
 
 export type UserRole = "tenant" | "landlord";
 
