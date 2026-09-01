@@ -73,6 +73,9 @@ interface AppStateValue {
   // بازدیدها و پیشنهادهای مستأجر
   bookings: VisitBooking[];
   offers: Offer[];
+  // تقویم بازدید هر آگهی
+  availability: AvailabilityMap;
+  setPropertyAvailability: (propertyId: string, days: DayAvailability) => void;
   addBooking: (input: {
     propertyId: string;
     date: string;
