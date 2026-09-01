@@ -116,6 +116,35 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     useState<Record<string, ActivePromotion>>(initialPromotions);
   const [bookings, setBookings] = useState<VisitBooking[]>(initialBookings);
   const [offers, setOffers] = useState<Offer[]>(initialOffers);
+  const [availability, setAvailability] = useState<AvailabilityMap>({});
+
+  // تقویم پیش‌فرض فقط در کلاینت ساخته می‌شود تا با SSR ناسازگار نشود
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("amlak-availability");
+      if (raw) {
+        setAvailability(JSON.parse(raw) as AvailabilityMap);
+        return;
+      }
+    } catch {
+      /* noop */
+    }
+    setAvailability(seedAvailability(landlordPropertyIds));
+  }, []);
+
+  const setPropertyAvailability = useCallback<
+    AppStateValue["setPropertyAvailability"]
+  >((propertyId, days) => {
+    setAvailability((prev) => {
+      const next = { ...prev, [propertyId]: days };
+      try {
+        sessionStorage.setItem("amlak-availability", JSON.stringify(next));
+      } catch {
+        /* noop */
+      }
+      return next;
+    });
+  }, []);
 
   const addBooking = useCallback<AppStateValue["addBooking"]>((input) => {
     const booking: VisitBooking = {
