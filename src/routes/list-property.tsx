@@ -177,6 +177,10 @@ function ListPropertyPage() {
 
   const submit = () => {
     setSubmitting(true);
+    const newId = `new-${Date.now()}`;
+    if (form.bookingEnabled && Object.keys(form.availability).length > 0) {
+      setPropertyAvailability(newId, form.availability);
+    }
     window.setTimeout(() => {
       setSubmitting(false);
       setDone(true);
