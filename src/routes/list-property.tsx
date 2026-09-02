@@ -120,6 +120,7 @@ const initialForm: FormState = {
   nationalId: "",
   bookingEnabled: true,
   onlineTour: false,
+  availability: {},
 };
 
 function ListPropertyPage() {
