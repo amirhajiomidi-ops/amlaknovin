@@ -25,6 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppState } from "@/context/app-state";
+import { AvailabilityEditor } from "@/components/property/availability-editor";
+import { type DayAvailability } from "@/data/availability";
 import { cities, neighborhoodsByCity } from "@/data/properties";
 import { formatCompactTomans, toFaDigits } from "@/lib/format";
 
