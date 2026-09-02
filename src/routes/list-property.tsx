@@ -126,7 +126,7 @@ const initialForm: FormState = {
 };
 
 function ListPropertyPage() {
-  const { user } = useAppState();
+  const { user, setPropertyAvailability } = useAppState();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(initialForm);
