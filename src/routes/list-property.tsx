@@ -93,6 +93,7 @@ interface FormState {
   nationalId: string;
   bookingEnabled: boolean;
   onlineTour: boolean;
+  availability: DayAvailability;
 }
 
 const initialForm: FormState = {
