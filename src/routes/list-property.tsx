@@ -25,6 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppState } from "@/context/app-state";
+import { AvailabilityEditor } from "@/components/property/availability-editor";
+import { type DayAvailability } from "@/data/availability";
 import { cities, neighborhoodsByCity } from "@/data/properties";
 import { formatCompactTomans, toFaDigits } from "@/lib/format";
 
@@ -93,6 +95,7 @@ interface FormState {
   nationalId: string;
   bookingEnabled: boolean;
   onlineTour: boolean;
+  availability: DayAvailability;
 }
 
 const initialForm: FormState = {
@@ -119,10 +122,11 @@ const initialForm: FormState = {
   nationalId: "",
   bookingEnabled: true,
   onlineTour: false,
+  availability: {},
 };
 
 function ListPropertyPage() {
-  const { user } = useAppState();
+  const { user, setPropertyAvailability } = useAppState();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(initialForm);
@@ -173,6 +177,10 @@ function ListPropertyPage() {
 
   const submit = () => {
     setSubmitting(true);
+    const newId = `new-${Date.now()}`;
+    if (form.bookingEnabled && Object.keys(form.availability).length > 0) {
+      setPropertyAvailability(newId, form.availability);
+    }
     window.setTimeout(() => {
       setSubmitting(false);
       setDone(true);
@@ -441,7 +449,20 @@ function ListPropertyPage() {
                     onChange={(v) => set("onlineTour", v)}
                   />
                 </div>
+                {form.bookingEnabled ? (
+                  <Field label="تقویم هوشمند بازدید">
+                    <p className="mb-3 text-xs text-muted-foreground">
+                      روزها و ساعت‌های آزاد بازدید را مشخص کنید؛ همین زمان‌ها در
+                      صفحه آگهی به مستأجران نمایش داده می‌شود و قابل رزرو است.
+                    </p>
+                    <AvailabilityEditor
+                      value={form.availability}
+                      onChange={(next) => set("availability", next)}
+                    />
+                  </Field>
+                ) : null}
               </>
+
             ) : null}
 
             {step === 2 ? (
