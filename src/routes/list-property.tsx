@@ -445,7 +445,20 @@ function ListPropertyPage() {
                     onChange={(v) => set("onlineTour", v)}
                   />
                 </div>
+                {form.bookingEnabled ? (
+                  <Field label="تقویم هوشمند بازدید">
+                    <p className="mb-3 text-xs text-muted-foreground">
+                      روزها و ساعت‌های آزاد بازدید را مشخص کنید؛ همین زمان‌ها در
+                      صفحه آگهی به مستأجران نمایش داده می‌شود و قابل رزرو است.
+                    </p>
+                    <AvailabilityEditor
+                      value={form.availability}
+                      onChange={(next) => set("availability", next)}
+                    />
+                  </Field>
+                ) : null}
               </>
+
             ) : null}
 
             {step === 2 ? (
