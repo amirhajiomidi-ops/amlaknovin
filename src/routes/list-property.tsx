@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppState } from "@/context/app-state";
+import { EnableRoleDialog } from "@/components/account/enable-role-dialog";
 import { AvailabilityEditor } from "@/components/property/availability-editor";
 import { type DayAvailability } from "@/data/availability";
 import { cities, neighborhoodsByCity } from "@/data/properties";
@@ -191,7 +192,11 @@ function ListPropertyPage() {
     return <AuthGate />;
   }
 
-  if (user.role === "landlord" && !user.identityVerified) {
+  if (!user.roles.includes("landlord")) {
+    return <LandlordRoleGate />;
+  }
+
+  if (!user.identityVerified) {
     return <VerifyGate />;
   }
 
@@ -859,6 +864,29 @@ function AuthGate() {
               </Link>
             </Button>
           </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function LandlordRoleGate() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="app-container py-14">
+      <EnableRoleDialog role="landlord" open={open} onOpenChange={setOpen} />
+      <Card className="mx-auto max-w-xl border-primary/25 bg-primary-soft/40">
+        <CardContent className="space-y-4 p-8 text-center">
+          <ShieldCheck className="mx-auto size-12 text-primary" aria-hidden />
+          <h1 className="text-xl font-bold text-foreground">
+            حساب موجر شما هنوز فعال نیست
+          </h1>
+          <p className="text-sm leading-7 text-muted-foreground">
+            برای ثبت ملک، حساب موجر را فعال کنید. حساب مستأجر شما حفظ می‌شود و
+            می‌توانید هر زمان بین دو حالت جابه‌جا شوید.
+          </p>
+          <Button onClick={() => setOpen(true)}>فعال‌سازی حساب موجر</Button>
         </CardContent>
       </Card>
     </div>

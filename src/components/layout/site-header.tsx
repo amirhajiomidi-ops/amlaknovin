@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { LogOut, Menu, Search, UserRound, Wallet } from "lucide-react";
+import { ArrowLeftRight, LogOut, Menu, Search, UserRound, Wallet } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { EnableRoleDialog } from "@/components/account/enable-role-dialog";
 import { useAppState } from "@/context/app-state";
 import { formatCompactTomans } from "@/lib/format";
 
@@ -20,15 +22,30 @@ const baseNav = [
 ];
 
 export function SiteHeader() {
-  const { user, signOut, balance } = useAppState();
+  const { user, signOut, balance, switchRole } = useAppState();
   const navigate = useNavigate();
+  const [enableOpen, setEnableOpen] = useState(false);
 
-  const panelTo = user?.role === "landlord" ? "/landlord" : "/tenant";
+  const panelTo = user?.activeRole === "landlord" ? "/landlord" : "/tenant";
+  const otherRole = user?.activeRole === "landlord" ? "tenant" : "landlord";
+  const otherRoleLabel = otherRole === "landlord" ? "موجر" : "مستأجر";
+  const hasOtherRole = Boolean(user?.roles.includes(otherRole));
   const navItems = user
     ? [{ label: "پنل من", to: panelTo as "/tenant" | "/landlord" }, ...baseNav]
     : baseNav;
 
   return (
+    <>
+    {user ? (
+      <EnableRoleDialog
+        role={otherRole}
+        open={enableOpen}
+        onOpenChange={setEnableOpen}
+        onEnabled={() =>
+          navigate({ to: otherRole === "landlord" ? "/landlord" : "/tenant" })
+        }
+      />
+    ) : null}
     <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur supports-[backdrop-filter]:bg-surface/70">
       <div className="app-container flex h-16 items-center gap-4">
         <Link to="/" className="flex items-center gap-2">
@@ -85,7 +102,9 @@ export function SiteHeader() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
                 <DropdownMenuLabel className="text-xs text-muted-foreground">
-                  {user.role === "landlord" ? "حساب موجر" : "حساب مستأجر"}
+                  {user.activeRole === "landlord"
+                    ? "حالت فعلی: موجر"
+                    : "حالت فعلی: مستأجر"}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
@@ -94,13 +113,31 @@ export function SiteHeader() {
                 <DropdownMenuItem asChild>
                   <Link
                     to={
-                      user.role === "landlord"
+                      user.activeRole === "landlord"
                         ? "/landlord/wallet"
                         : "/tenant/wallet"
                     }
                   >
                     کیف پول
                   </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    if (hasOtherRole) {
+                      switchRole(otherRole);
+                      navigate({
+                        to: otherRole === "landlord" ? "/landlord" : "/tenant",
+                      });
+                    } else {
+                      setEnableOpen(true);
+                    }
+                  }}
+                >
+                  <ArrowLeftRight className="size-4" aria-hidden />
+                  {hasOtherRole
+                    ? `تغییر به حالت ${otherRoleLabel}`
+                    : `فعال‌سازی حساب ${otherRoleLabel}`}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -146,5 +183,6 @@ export function SiteHeader() {
         </button>
       </div>
     </header>
+    </>
   );
 }

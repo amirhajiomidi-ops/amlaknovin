@@ -72,7 +72,7 @@ function LandlordLayout() {
         <div>
           <p className="text-sm text-muted-foreground">پنل موجر</p>
           <h1 className="text-2xl font-bold text-foreground">
-            {user?.role === "landlord" ? user.fullName : landlordProfile.fullName}
+            {user?.roles.includes("landlord") ? user.fullName : landlordProfile.fullName}
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
             نرخ پاسخ‌گویی: {toFaDigits(landlordProfile.responseRate)}٪

@@ -38,9 +38,35 @@ export type UserRole = "tenant" | "landlord";
 export interface AppUser {
   fullName: string;
   phone: string;
-  role: UserRole;
+  /** نقش‌های فعال کاربر (می‌تواند هر دو باشد) */
+  roles: UserRole[];
+  /** نقشی که هم‌اکنون در آن حالت است */
+  activeRole: UserRole;
   identityVerified?: boolean;
   nationalId?: string;
+}
+
+/** پشتیبانی از داده‌های قدیمی که فقط یک `role` داشتند */
+type StoredUser = Partial<AppUser> & { role?: UserRole };
+
+export function normalizeUser(raw: StoredUser | null | undefined): AppUser | null {
+  if (!raw || !raw.phone) return null;
+  const roles =
+    raw.roles && raw.roles.length > 0
+      ? raw.roles
+      : ([raw.role ?? "tenant"] as UserRole[]);
+  const activeRole =
+    raw.activeRole && roles.includes(raw.activeRole)
+      ? raw.activeRole
+      : (roles[0] as UserRole);
+  return {
+    fullName: raw.fullName ?? "کاربر املاک",
+    phone: raw.phone,
+    roles,
+    activeRole,
+    identityVerified: raw.identityVerified ?? false,
+    ...(raw.nationalId ? { nationalId: raw.nationalId } : {}),
+  };
 }
 
 export interface TenantDocs {
@@ -54,6 +80,9 @@ interface AppStateValue {
   signIn: (user: AppUser) => void;
   signOut: () => void;
   verifyIdentity: (nationalId: string) => void;
+  hasRole: (role: UserRole) => boolean;
+  enableRole: (role: UserRole) => void;
+  switchRole: (role: UserRole) => void;
   // مدارک مستأجر (شبیه‌سازی بارگذاری)
   tenantDocs: TenantDocs;
   setTenantDoc: (key: keyof TenantDocs, name: string) => void;
@@ -104,7 +133,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem("amlak-user");
-      if (raw) setUser(JSON.parse(raw) as AppUser);
+      if (raw) setUser(normalizeUser(JSON.parse(raw) as StoredUser));
     } catch {
       /* noop */
     }
@@ -215,14 +244,15 @@ const ACCOUNTS_KEY = "amlak-accounts";
     try {
       const raw = localStorage.getItem(ACCOUNTS_KEY);
       if (!raw) return null;
-      const map = JSON.parse(raw) as Record<string, AppUser>;
-      return map[phone] ?? null;
+      const map = JSON.parse(raw) as Record<string, StoredUser>;
+      return normalizeUser(map[phone]);
     } catch {
       return null;
     }
   }, []);
 
-  const signIn = useCallback((u: AppUser) => {
+  const signIn = useCallback((input: AppUser) => {
+    const u = normalizeUser(input) as AppUser;
     setUser(u);
     persistAccount(u);
     try {
@@ -238,6 +268,34 @@ const ACCOUNTS_KEY = "amlak-accounts";
     } catch {
       /* noop */
     }
+  }, []);
+
+  const persistUser = (next: AppUser) => {
+    persistAccount(next);
+    try {
+      sessionStorage.setItem("amlak-user", JSON.stringify(next));
+    } catch {
+      /* noop */
+    }
+  };
+
+  const enableRole = useCallback<AppStateValue["enableRole"]>((role) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const roles = prev.roles.includes(role) ? prev.roles : [...prev.roles, role];
+      const next: AppUser = { ...prev, roles, activeRole: role };
+      persistUser(next);
+      return next;
+    });
+  }, []);
+
+  const switchRole = useCallback<AppStateValue["switchRole"]>((role) => {
+    setUser((prev) => {
+      if (!prev || !prev.roles.includes(role)) return prev;
+      const next: AppUser = { ...prev, activeRole: role };
+      persistUser(next);
+      return next;
+    });
   }, []);
 
   const verifyIdentity = useCallback((nationalId: string) => {
@@ -315,12 +373,20 @@ const ACCOUNTS_KEY = "amlak-accounts";
     [addTx, balance],
   );
 
+  const hasRole = useCallback<AppStateValue["hasRole"]>(
+    (role) => Boolean(user?.roles.includes(role)),
+    [user],
+  );
+
   const value = useMemo(
     () => ({
       user,
       signIn,
       signOut,
       verifyIdentity,
+      hasRole,
+      enableRole,
+      switchRole,
       tenantDocs,
       setTenantDoc,
       findAccount,
@@ -347,6 +413,9 @@ const ACCOUNTS_KEY = "amlak-accounts";
       signIn,
       signOut,
       verifyIdentity,
+      hasRole,
+      enableRole,
+      switchRole,
       tenantDocs,
       setTenantDoc,
       findAccount,

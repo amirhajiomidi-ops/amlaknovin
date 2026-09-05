@@ -15,7 +15,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { EnableRoleDialog } from "@/components/account/enable-role-dialog";
 import { useAppState } from "@/context/app-state";
+import { isOwnProperty } from "@/lib/ownership";
 import type { Property } from "@/data/properties";
 import type { VisitBooking } from "@/data/tenant";
 import {
@@ -34,7 +36,8 @@ export function BookingDialog({
   property: Property;
   trigger: ReactNode;
 }) {
-  const { user, addBooking, availability, bookings } = useAppState();
+  const { user, addBooking, availability, bookings, hasRole } = useAppState();
+  const [enableOpen, setEnableOpen] = useState(false);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>();
@@ -80,7 +83,15 @@ export function BookingDialog({
       void navigate({ to: "/auth", search: { mode: "login" } });
       return;
     }
-    if (next && user?.role === "tenant" && !user.identityVerified) {
+    if (next && isOwnProperty(user, property.id)) {
+      toast.info("این آگهی متعلق به شماست؛ امکان رزرو بازدید روی آن وجود ندارد.");
+      return;
+    }
+    if (next && user && !hasRole("tenant")) {
+      setEnableOpen(true);
+      return;
+    }
+    if (next && user && !user.identityVerified) {
       toast.warning("برای رزرو بازدید ابتدا احراز هویت را در پروفایل مالی کامل کنید.");
       void navigate({ to: "/tenant/profile" });
       return;
@@ -103,6 +114,20 @@ export function BookingDialog({
   };
 
   return (
+    <>
+    <EnableRoleDialog
+      role="tenant"
+      open={enableOpen}
+      onOpenChange={setEnableOpen}
+      onEnabled={() => {
+        if (user?.identityVerified) {
+          setOpen(true);
+        } else {
+          toast.info("حساب مستأجر فعال شد؛ برای ادامه پروفایل مالی را تکمیل کنید.");
+          void navigate({ to: "/tenant/profile" });
+        }
+      }}
+    />
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
@@ -240,6 +265,7 @@ export function BookingDialog({
         )}
       </DialogContent>
     </Dialog>
+    </>
   );
 }
 
