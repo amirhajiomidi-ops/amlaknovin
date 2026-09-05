@@ -91,7 +91,8 @@ function PropertyDetail() {
   const fit = currentTenantFit[property.id];
   const { promotions, user } = useAppState();
   const promo = activePromo(promotions, property.id);
-  const tenantBlocked = user?.role === "tenant" && !user.identityVerified;
+  const tenantBlocked =
+    Boolean(user?.roles.includes("tenant")) && !user?.identityVerified;
 
   if (tenantBlocked) {
     return <TenantVerificationGate />;
