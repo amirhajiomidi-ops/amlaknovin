@@ -103,7 +103,8 @@ function AuthPage() {
         signIn({
           fullName: fullName.trim(),
           phone,
-          role,
+          roles: [role],
+          activeRole: role,
           identityVerified: false,
         });
         navigate({ to: role === "landlord" ? "/landlord" : "/tenant" });
@@ -111,12 +112,13 @@ function AuthPage() {
       }
       // ورود: نقش از حساب قبلی خوانده می‌شود (پیش‌فرض: مستأجر)
       const account = findAccount(phone);
-      const nextRole: UserRole = account?.role ?? "tenant";
+      const nextRole: UserRole = account?.activeRole ?? "tenant";
       signIn(
         account ?? {
           fullName: "کاربر املاک",
           phone,
-          role: nextRole,
+          roles: [nextRole],
+          activeRole: nextRole,
         },
       );
       navigate({ to: nextRole === "landlord" ? "/landlord" : "/tenant" });

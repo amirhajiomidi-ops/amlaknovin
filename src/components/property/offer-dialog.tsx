@@ -16,7 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { EnableRoleDialog } from "@/components/account/enable-role-dialog";
 import { useAppState } from "@/context/app-state";
+import { isOwnProperty } from "@/lib/ownership";
 import type { Property } from "@/data/properties";
 import { formatCompactTomans, toFaDigits } from "@/lib/format";
 
@@ -29,7 +31,8 @@ export function OfferDialog({
   property: Property;
   trigger: ReactNode;
 }) {
-  const { user, addOffer } = useAppState();
+  const { user, addOffer, hasRole } = useAppState();
+  const [enableOpen, setEnableOpen] = useState(false);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
@@ -51,7 +54,15 @@ export function OfferDialog({
       void navigate({ to: "/auth", search: { mode: "login" } });
       return;
     }
-    if (next && user?.role === "tenant" && !user.identityVerified) {
+    if (next && isOwnProperty(user, property.id)) {
+      toast.info("این آگهی متعلق به شماست؛ امکان ثبت پیشنهاد روی آن وجود ندارد.");
+      return;
+    }
+    if (next && user && !hasRole("tenant")) {
+      setEnableOpen(true);
+      return;
+    }
+    if (next && user && !user.identityVerified) {
       toast.warning("برای ثبت پیشنهاد ابتدا احراز هویت را در پروفایل مالی کامل کنید.");
       void navigate({ to: "/tenant/profile" });
       return;
@@ -80,6 +91,20 @@ export function OfferDialog({
   };
 
   return (
+    <>
+    <EnableRoleDialog
+      role="tenant"
+      open={enableOpen}
+      onOpenChange={setEnableOpen}
+      onEnabled={() => {
+        if (user?.identityVerified) {
+          setOpen(true);
+        } else {
+          toast.info("حساب مستأجر فعال شد؛ برای ادامه پروفایل مالی را تکمیل کنید.");
+          void navigate({ to: "/tenant/profile" });
+        }
+      }}
+    />
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
@@ -192,5 +217,6 @@ export function OfferDialog({
         )}
       </DialogContent>
     </Dialog>
+    </>
   );
 }
