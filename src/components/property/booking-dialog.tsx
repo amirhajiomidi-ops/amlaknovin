@@ -36,7 +36,8 @@ export function BookingDialog({
   property: Property;
   trigger: ReactNode;
 }) {
-  const { user, addBooking, availability, bookings } = useAppState();
+  const { user, addBooking, availability, bookings, hasRole } = useAppState();
+  const [enableOpen, setEnableOpen] = useState(false);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>();
