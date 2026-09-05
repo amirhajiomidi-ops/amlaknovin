@@ -7,6 +7,7 @@ import {
   UserRound,
 } from "lucide-react";
 
+import { useAppState } from "@/context/app-state";
 import { tenantProfile } from "@/data/tenant";
 import { toFaDigits } from "@/lib/format";
 
@@ -44,6 +45,7 @@ const navItems: ReadonlyArray<{
 
 function TenantLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user } = useAppState();
 
   return (
     <div className="app-container py-6">
@@ -51,7 +53,7 @@ function TenantLayout() {
         <div>
           <p className="text-sm text-muted-foreground">خوش آمدید</p>
           <h1 className="text-2xl font-bold text-foreground">
-            {tenantProfile.fullName}
+            {user?.roles.includes("tenant") ? user.fullName : tenantProfile.fullName}
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
             امتیاز اعتباری: {toFaDigits(tenantProfile.creditScore)} از {toFaDigits(1000)}
