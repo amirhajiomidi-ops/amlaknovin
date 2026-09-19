@@ -51,9 +51,9 @@ export function SiteHeader() {
         <Link to="/" className="flex items-center gap-2">
           <span
             aria-hidden
-            className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground font-bold"
+            className="grid size-9 place-items-center rounded-xl bg-primary-soft text-primary"
           >
-            ه
+            <Home className="size-5" aria-hidden />
           </span>
           <span className="text-lg font-bold tracking-tight text-foreground">
             هوم نوین
