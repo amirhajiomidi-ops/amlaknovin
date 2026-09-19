@@ -56,9 +56,9 @@ export function SiteFooter() {
                 aria-hidden
                 className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground font-bold"
               >
-                ا
+                ه
               </span>
-              <span className="text-lg font-bold text-foreground">املاک</span>
+              <span className="text-lg font-bold text-foreground">هوم نوین</span>
             </div>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               مسیر امن رهن و اجاره مسکونی؛ از فایل تأییدشده تا قرارداد و تسویه.
@@ -85,7 +85,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {year} پلتفرم املاک — همه حقوق محفوظ است.</p>
+          <p>© {year} پلتفرم هوم نوین — همه حقوق محفوظ است.</p>
           <p>ساخته‌شده برای معامله‌ای شفاف و امن.</p>
         </div>
       </div>

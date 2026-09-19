@@ -53,10 +53,10 @@ export function SiteHeader() {
             aria-hidden
             className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground font-bold"
           >
-            ا
+            ه
           </span>
           <span className="text-lg font-bold tracking-tight text-foreground">
-            املاک
+            هوم نوین
           </span>
         </Link>
 
