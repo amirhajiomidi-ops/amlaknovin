@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeftRight, Home, LogOut, Menu, Search, UserRound, Wallet } from "lucide-react";
+import { ArrowLeftRight, Home, LogOut, Menu, UserRound, Wallet } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
