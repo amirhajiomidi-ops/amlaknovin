@@ -85,7 +85,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {year} پلتفرم املاک — همه حقوق محفوظ است.</p>
+          <p>© {year} پلتفرم هوم نوین — همه حقوق محفوظ است.</p>
           <p>ساخته‌شده برای معامله‌ای شفاف و امن.</p>
         </div>
       </div>
