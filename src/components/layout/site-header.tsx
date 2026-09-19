@@ -60,19 +60,10 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <div className="hidden flex-1 md:block">
-          <label className="relative block">
-            <span className="sr-only">جست‌وجوی سریع</span>
-            <Search
-              aria-hidden
-              className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-            <input
-              type="search"
-              placeholder="جست‌وجو در محله، متراژ، ودیعه…"
-              className="w-full rounded-xl border border-border bg-background py-2 pe-9 ps-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary"
-            />
-          </label>
+        <div className="hidden flex-1 md:flex md:items-center">
+          <span className="text-sm font-medium text-muted-foreground">
+            با خیال راحت معامله کن
+          </span>
         </div>
 
         <nav className="hidden items-center gap-1 lg:flex">
