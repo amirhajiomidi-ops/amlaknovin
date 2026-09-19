@@ -109,13 +109,6 @@ function HomePage() {
       {/* Hero */}
       <section className="app-container">
         <div className="fade-up relative overflow-hidden rounded-3xl border border-border bg-gradient-to-bl from-primary-soft via-surface to-accent-soft p-8 md:p-14">
-          <Badge
-            variant="secondary"
-            className="rounded-full bg-primary-soft text-primary"
-          >
-            <Sparkles className="ms-1 size-3.5" aria-hidden />
-            فاز دوم — تهران و کرج
-          </Badge>
           <h1 className="mt-4 max-w-2xl text-3xl font-bold leading-tight text-foreground md:text-5xl md:leading-[1.15]">
             از فایل معتبر تا قرارداد امن
           </h1>

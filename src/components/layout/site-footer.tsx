@@ -56,9 +56,9 @@ export function SiteFooter() {
                 aria-hidden
                 className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground font-bold"
               >
-                ا
+                ه
               </span>
-              <span className="text-lg font-bold text-foreground">املاک</span>
+              <span className="text-lg font-bold text-foreground">هوم نوین</span>
             </div>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               مسیر امن رهن و اجاره مسکونی؛ از فایل تأییدشده تا قرارداد و تسویه.
